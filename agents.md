@@ -257,6 +257,7 @@ export interface SafeSnapshot {
 > Format: `YYYY‑MM‑DD • short note • commit <hash>`
 
 2025-09-12 • set up basic layout and Vite scaffolding • commit acc45b2
+2025-09-12 • refine project scaffolding • commit cf25ff4
 
 ---
 

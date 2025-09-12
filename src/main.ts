@@ -1,5 +1,7 @@
-const panel = document.querySelector('.safe-panel');
+import '../styles/app.css';
+
+const panel = document.querySelector<HTMLDivElement>('.safe-panel');
 
 panel?.addEventListener('click', () => {
-  alert('Placeholder interaction');
+  console.log('Safe panel clicked');
 });
