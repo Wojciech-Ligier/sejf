@@ -7,6 +7,7 @@
 ## 1) Game Concept (Authoritative Spec)
 
 **Core loop**
+
 1. **Start:** The game begins with a **new, open safe**. Contents are empty.
 2. **Open state:** Player can see contents and:
    - Edit **text** content.
@@ -18,20 +19,24 @@
    - **Self‑destruct** may trigger by **time** (if armed) or by **exceeded PIN attempts** (if armed). Both conditions are **optional**.
 4. **Explosion (destruction):**
    - If the “**Can content survive the explosion?**” option is **checked**, there is a **10%** chance that the contents **survive** the explosion.
-   - If contents **survive**, the safe **remains closed** with the *same PIN and settings*, the contents are intact, and play continues.
+   - If contents **survive**, the safe **remains closed** with the _same PIN and settings_, the contents are intact, and play continues.
    - If contents **do not survive**, the safe is **destroyed** → the game **spawns a new open safe** with **empty contents** and default settings, and the loop repeats.
 
 **Destruction conditions**
+
 - **Autodestruct timer** (optional): 1–999 minutes after closing the safe. If not set, no time‑based destruction.
 - **PIN attempt limit** (optional): if set, after N wrong PIN entries the safe explodes. If not set, unlimited attempts.
 
 **Languages**
+
 - UI supports **PL / EN / IT**. The language is configurable in settings and persists between sessions.
 
 **Survival chance**
+
 - A checkbox **"Can content survive the explosion?"** (default: unchecked). If checked, survival chance is **10%** per explosion event.
 
 **Security note**
+
 - This is a **toy game**. PINs are **not for real security**. We will hash PINs client‑side only to avoid casual disclosure, but this provides **no strong protection**.
 
 ---
@@ -39,6 +44,7 @@
 ## 2) UX Outline
 
 **Main areas**
+
 - **Safe panel**
   - **Open state:** content editor (text area), image picker with preview, settings button, close button.
   - **Closed state:** PIN input, attempts remaining (if limited), time to autodestruct (if armed), open button.
@@ -54,6 +60,7 @@
   - Visible animation/message: “**Explosion!**” + result (“**Contents survived**” or “**Destroyed**”).
 
 **Accessibility**
+
 - Full keyboard navigation, labels for inputs, ARIA roles for dialogs, focus management.
 
 ---
@@ -93,6 +100,7 @@ export interface SafeSnapshot {
 ```
 
 **Lifecycle**
+
 - **Spawn** new safe → `state = 'open'`, empty content, defaults.
 - **Close**:
   - Require PIN (+confirmation). Store `pinHash` (sha256). Set `closedAt`.
@@ -128,10 +136,12 @@ export interface SafeSnapshot {
 ## 6) Technology & Project Layout
 
 **MVP stack (no backend):**
+
 - **Vite + TypeScript + Vanilla DOM** (no framework) for minimal footprint.
 - Plain CSS with a small utility layer (e.g., CSS variables) for theming.
 
 **Repo structure**
+
 ```
 / (root)
   ├─ index.html
@@ -155,6 +165,7 @@ export interface SafeSnapshot {
 ```
 
 **Build/Run**
+
 - `npm i`
 - `npm run dev` (Vite dev server)
 - `npm run build` → `dist/`
@@ -193,17 +204,20 @@ export interface SafeSnapshot {
 ## 10) Task Board (track progress here)
 
 ### A. Foundations
-- [ ] Initialize Vite + TypeScript project, ESLint, Prettier.
+
+- [x] Initialize Vite + TypeScript project, ESLint, Prettier.
 - [ ] Set up `index.html`, basic layout, and `app.css`.
 - [ ] Define TypeScript types (`types.d.ts`).
 
 ### B. State & Persistence
+
 - [ ] Implement `SafeSnapshot` state machine with events (open, close, wrongPin, tick, explode, survive).
 - [ ] PIN hashing via Web Crypto (sha256).
 - [ ] `localStorage` persistence with migration.
 - [ ] Timer handling (`destructAt`) with wake‑up check.
 
 ### C. UI/UX
+
 - [ ] Open state UI: text editor, image picker + preview, settings button, close button.
 - [ ] Close flow: PIN + Confirm PIN modal.
 - [ ] Closed state UI: PIN input, attempts remaining (if any), timer countdown (if any), open button.
@@ -211,21 +225,25 @@ export interface SafeSnapshot {
 - [ ] Accessibility: labels, focus traps in modals, keyboard shortcuts.
 
 ### D. Settings & i18n
+
 - [ ] Settings modal (open‑only): language, timer minutes (1–999 or disabled), attempts limit (≥1 or disabled), survival checkbox.
 - [ ] i18n files: **en.json**, **pl.json**, **it.json** (100% coverage).
 - [ ] Language switcher (persists across sessions).
 
 ### E. Media Handling
+
 - [ ] Image selection (file input) → Data URL preview.
 - [ ] Optional image compression (canvas) + size guard with user feedback.
 
 ### F. Game Logic Edge Cases
+
 - [ ] Reload while closed: enforce timer/attempts correctly.
 - [ ] Attempt limit reached triggers explosion exactly once.
 - [ ] Survival chance roll using `crypto.getRandomValues` (10%).
 - [ ] Post‑explosion state: survive → remain closed; fail → new open safe with defaults.
 
 ### G. Testing & Docs
+
 - [ ] Unit tests: state transitions, hashing, survival roll, timer expiry, attempts.
 - [ ] E2E tests (Playwright): happy path, wrong PIN path, timer path.
 - [ ] README with quick start + screenshots.
@@ -256,11 +274,10 @@ export interface SafeSnapshot {
 
 > Format: `YYYY‑MM‑DD • short note • commit <hash>`
 
-- _No entries yet._
+- 2025-09-12 • initialize Vite + TypeScript project, ESLint, Prettier, Wrangler setup • commit 361ee49
 
 ---
 
 ## 14) License
 
 - Default to **MIT** unless the repository specifies otherwise.
-
