@@ -213,7 +213,7 @@ export interface SafeSnapshot {
 
 - [x] Implement `SafeSnapshot` state machine with events (open, close, wrongPin, tick, explode, survive).
 - [x] PIN hashing via Web Crypto (sha256).
-- [ ] `localStorage` persistence with migration.
+- [x] `localStorage` persistence with migration.
 - [ ] Timer handling (`destructAt`) with wake‑up check.
 
 ### C. UI/UX
@@ -279,8 +279,7 @@ export interface SafeSnapshot {
 - 2025-09-12 • define core TypeScript types • commit a49745c
 - 2025-09-12 • implement SafeSnapshot state machine • commit 82d8e61
 - 2025-09-12 • add PIN hashing via Web Crypto • commit 47ec345
-
----
+- 2025-09-12 • add localStorage persistence with migration • commit 6c91e1c
 
 ## 14) License
 
