@@ -207,7 +207,7 @@ export interface SafeSnapshot {
 
 - [x] Initialize Vite + TypeScript project, ESLint, Prettier.
 - [x] Set up `index.html`, basic layout, and `app.css`.
-- [ ] Define TypeScript types (`types.d.ts`).
+- [x] Define TypeScript types (`types.d.ts`).
 
 ### B. State & Persistence
 
@@ -276,6 +276,7 @@ export interface SafeSnapshot {
 
 - 2025-09-12 • initialize Vite + TypeScript project, ESLint, Prettier, Wrangler setup • commit 361ee49
 - 2025-09-12 • set up basic layout with placeholder safe panel • commit 11b7b69
+- 2025-09-12 • define core TypeScript types • commit a49745c
 
 ---
 
