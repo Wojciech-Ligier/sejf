@@ -285,6 +285,8 @@ export interface SafeSnapshot {
 - 2025-09-13 • add safe icon and dark theme styling • commit 461d656
 - 2025-09-13 • expand open state to fullscreen with text/image buttons • commit c970a35
 - 2025-09-13 • add button glow and disable textarea resize • commit 8ff7575
+- 2025-09-12 • adjust deploy script for Pages • commit 517d95c
+- 2025-09-12 • configure wrangler assets and lint dependency • commit e6890b1
 
 ## 14) License
 
