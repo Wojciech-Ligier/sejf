@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "wrangler pages publish dist",
-    "lint": "eslint . --ext .ts",
+    "deploy": "wrangler pages deploy dist",
+    "lint": "eslint .",
     "format": "prettier -w ."
   },
   "devDependencies": {
