@@ -1,0 +1,13 @@
+Create a single flat vector cartoon icon on a transparent background (PNG, 1024×1024). Centered composition, front view, orthographic. Do not insert any background, floor, gradients, textures, text, or drop shadows.
+
+Design specs (use exactly these in every image of this series):
+• Safe body: square with 28 px corner radius; outer stroke 6 px #2B2B2B; body fill #B0B7C3; door fill #8C99A6.
+• Hinges: on the right side, visible, #727D8A.
+• Handle wheel: centered on the door, gold #D4AF37 with 6 spokes; spindle #B08C2D.
+• Keypad: small rectangle at the door’s top-right; fill #222222; 3×3 dots #A7B4C3.
+• Interior (when visible): cavity fill #1F2630 with 6 px inner rim stroke #2B2B2B.
+• Line style: uniform 6 px outlines; minimal flat shading using one darker tone #8C99A6 along the door edge only.
+
+Generator parameters (if available): aspect ratio 1:1; seed 4242; style “flat vector cartoon”; output PNG with alpha; no background.
+
+Scene: Same ruined safe as in file 09. Inside the cavity, place ONE INTACT A4 document icon: sheet #FFFFFF, dog‑ear #EAEAEA, 5 lines #BDC6D0. Surrounding interior shows light soot (#3A3A3A), but the document remains clean and clearly intact.
