@@ -195,7 +195,7 @@ export interface SafeSnapshot {
 ### A. Foundations
 - [ ] Initialize Vite + TypeScript project, ESLint, Prettier.
 - [ ] Set up `index.html`, basic layout, and `app.css`.
-- [ ] Define TypeScript types (`types.d.ts`).
+- [x] Define TypeScript types (`types.d.ts`).
 
 ### B. State & Persistence
 - [ ] Implement `SafeSnapshot` state machine with events (open, close, wrongPin, tick, explode, survive).
@@ -256,7 +256,7 @@ export interface SafeSnapshot {
 
 > Format: `YYYY‑MM‑DD • short note • commit <hash>`
 
-- _No entries yet._
+- 2025-09-12 • define TypeScript types • commit ccaba4b
 
 ---
 
