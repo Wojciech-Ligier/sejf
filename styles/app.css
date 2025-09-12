@@ -1,6 +1,17 @@
 :root {
-  font-family: sans-serif;
-  line-height: 1.5;
+  --bg: #0b0d10;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel-bright: rgba(255, 255, 255, 0.12);
+  --txt: #e6edf3;
+  --muted: #9aa6b2;
+  --brand: #8a5cf6;
+  --brand-2: #2dd4bf;
+  --card-radius: 18px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -9,13 +20,84 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f5f5;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(138, 92, 246, 0.28), transparent 60%),
+    radial-gradient(900px 500px at 105% 10%, rgba(45, 212, 191, 0.18), transparent 60%),
+    var(--bg);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-size: 160% 90%, 140% 80%, auto;
+  color: var(--txt);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell,
+    'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
 }
 
 .safe-panel {
-  border: 2px dashed #ccc;
-  padding: 2rem;
-  text-align: center;
-  background-color: #fff;
-  width: 300px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--card-radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.safe-panel:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.safe-icon {
+  width: 100px;
+  align-self: center;
+}
+
+.safe-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.safe-content textarea {
+  width: 100%;
+  min-height: 6rem;
+  background: var(--panel-bright);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: var(--txt);
+  padding: 8px;
+  font-family: inherit;
+}
+
+.safe-content input[type='file'] {
+  color: var(--txt);
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+}
+
+.safe-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.safe-actions button {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--panel-bright);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--txt);
+  font-weight: 600;
+}
+
+.safe-actions button:hover {
+  border-color: rgba(255, 255, 255, 0.16);
 }
