@@ -287,6 +287,7 @@ export interface SafeSnapshot {
 - 2025-09-13 • add button glow and disable textarea resize • commit 8ff7575
 - 2025-09-12 • adjust deploy script for Pages • commit 517d95c
 - 2025-09-12 • configure wrangler assets and lint dependency • commit e6890b1
+- 2025-09-13 • skip Cloudflare deploy when token missing • commit 1ed03b5
 
 ## 14) License
 
