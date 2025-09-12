@@ -214,7 +214,7 @@ export interface SafeSnapshot {
 - [ ] Implement `SafeSnapshot` state machine with events (open, close, wrongPin, tick, explode, survive).
 - [ ] PIN hashing via Web Crypto (sha256).
 - [ ] `localStorage` persistence with migration.
-- [ ] Timer handling (`destructAt`) with wake‑up check.
+- [x] Timer handling (`destructAt`) with wake‑up check.
 
 ### C. UI/UX
 
@@ -277,6 +277,8 @@ export interface SafeSnapshot {
 - 2025-09-12 • initialize Vite + TypeScript project, ESLint, Prettier, Wrangler setup • commit 361ee49
 - 2025-09-12 • set up basic layout with placeholder safe panel • commit 11b7b69
 - 2025-09-12 • define core TypeScript types • commit a49745c
+
+- 2025-09-12 • add destruct timer with wake-up check • commit 76073394
 
 ---
 
