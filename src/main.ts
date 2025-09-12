@@ -67,18 +67,13 @@ function renderOpen(): HTMLElement {
 
   const content = document.createElement('div');
   content.className = 'safe-content';
-
-  const textarea = document.createElement('textarea');
-  textarea.value = snapshot.content.text;
-  textarea.addEventListener('input', () => {
-    snapshot.content.text = textarea.value;
-    saveSnapshot(snapshot);
-  });
-  content.appendChild(textarea);
+  const top = document.createElement('div');
+  top.className = 'safe-top';
 
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
   fileInput.accept = 'image/*';
+  fileInput.className = 'file-input';
   fileInput.addEventListener('change', () => {
     const file = fileInput.files?.[0];
     if (!file) return;
@@ -90,6 +85,28 @@ function renderOpen(): HTMLElement {
     };
     reader.readAsDataURL(file);
   });
+
+  const textarea = document.createElement('textarea');
+  textarea.value = snapshot.content.text;
+  textarea.addEventListener('input', () => {
+    snapshot.content.text = textarea.value;
+    saveSnapshot(snapshot);
+  });
+
+  const textBtn = document.createElement('button');
+  textBtn.textContent = 'Włóż tekst';
+  textBtn.addEventListener('click', () => {
+    textarea.focus();
+  });
+  top.appendChild(textBtn);
+
+  const imageBtn = document.createElement('button');
+  imageBtn.textContent = 'Wybierz obrazek';
+  imageBtn.addEventListener('click', () => fileInput.click());
+  top.appendChild(imageBtn);
+
+  content.appendChild(top);
+  content.appendChild(textarea);
   content.appendChild(fileInput);
 
   if (snapshot.content.imageDataUrl) {
@@ -103,14 +120,14 @@ function renderOpen(): HTMLElement {
   actions.className = 'safe-actions';
 
   const settingsBtn = document.createElement('button');
-  settingsBtn.textContent = 'Settings';
+  settingsBtn.textContent = 'Ustawienia';
   settingsBtn.addEventListener('click', () => {
     console.log('open settings not implemented');
   });
   actions.appendChild(settingsBtn);
 
   const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'Close';
+  closeBtn.textContent = 'Zamknij';
   closeBtn.addEventListener('click', () => {
     console.log('close not implemented');
   });
