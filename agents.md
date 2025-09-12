@@ -218,7 +218,7 @@ export interface SafeSnapshot {
 
 ### C. UI/UX
 
-- [ ] Open state UI: text editor, image picker + preview, settings button, close button.
+ - [x] Open state UI: text editor, image picker + preview, settings button, close button.
 - [ ] Close flow: PIN + Confirm PIN modal.
 - [ ] Closed state UI: PIN input, attempts remaining (if any), timer countdown (if any), open button.
 - [ ] Explosion feedback (animation/message) + survival result text.
@@ -281,6 +281,10 @@ export interface SafeSnapshot {
 - 2025-09-12 • add PIN hashing via Web Crypto • commit 47ec345
 - 2025-09-12 • add localStorage persistence with migration • commit 6c91e1c
 - 2025-09-12 • handle destruct timer with wake-up check • commit 7dcdf3f
+- 2025-09-12 • implement open state UI • commit 27ea493
+- 2025-09-13 • add safe icon and dark theme styling • commit 461d656
+- 2025-09-13 • expand open state to fullscreen with text/image buttons • commit c970a35
+- 2025-09-13 • add button glow and disable textarea resize • commit 8ff7575
 
 ## 14) License
 
