@@ -214,7 +214,7 @@ export interface SafeSnapshot {
 - [x] Implement `SafeSnapshot` state machine with events (open, close, wrongPin, tick, explode, survive).
 - [x] PIN hashing via Web Crypto (sha256).
 - [x] `localStorage` persistence with migration.
-- [ ] Timer handling (`destructAt`) with wake‑up check.
+- [x] Timer handling (`destructAt`) with wake‑up check.
 
 ### C. UI/UX
 
@@ -280,6 +280,7 @@ export interface SafeSnapshot {
 - 2025-09-12 • implement SafeSnapshot state machine • commit 82d8e61
 - 2025-09-12 • add PIN hashing via Web Crypto • commit 47ec345
 - 2025-09-12 • add localStorage persistence with migration • commit 6c91e1c
+- 2025-09-12 • handle destruct timer with wake-up check • commit 7dcdf3f
 
 ## 14) License
 
