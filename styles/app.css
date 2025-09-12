@@ -76,10 +76,12 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--txt);
   font-weight: 600;
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.4);
 }
 
 .safe-top button:hover {
   border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.6);
 }
 
 .safe-content textarea {
@@ -92,6 +94,7 @@ body {
   color: var(--txt);
   padding: 8px;
   font-family: inherit;
+  resize: none;
 }
 
 .file-input {
@@ -122,8 +125,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--txt);
   font-weight: 600;
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.4);
 }
 
 .safe-actions button:hover {
   border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.6);
 }

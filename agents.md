@@ -284,6 +284,7 @@ export interface SafeSnapshot {
 - 2025-09-12 • implement open state UI • commit 27ea493
 - 2025-09-13 • add safe icon and dark theme styling • commit 461d656
 - 2025-09-13 • expand open state to fullscreen with text/image buttons • commit c970a35
+- 2025-09-13 • add button glow and disable textarea resize • commit 8ff7575
 
 ## 14) License
 
