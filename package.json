@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "if [ -z \"$CLOUDFLARE_API_TOKEN\" ]; then echo 'Skipping Cloudflare deploy: CLOUDFLARE_API_TOKEN not set' && exit 0; else wrangler pages deploy dist; fi",
+    "deploy": "wrangler deploy",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier -w ."
   },

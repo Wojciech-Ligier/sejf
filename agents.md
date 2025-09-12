@@ -288,6 +288,8 @@ export interface SafeSnapshot {
 - 2025-09-12 • adjust deploy script for Pages • commit 517d95c
 - 2025-09-12 • configure wrangler assets and lint dependency • commit e6890b1
 - 2025-09-13 • skip Cloudflare deploy when token missing • commit 1ed03b5
+- 2025-09-13 • switch to worker deploy and assets binding • commit 11c7359
+- 2025-09-13 • fix assets directory field for worker deploy • commit 5a71ced
 
 ## 14) License
 
