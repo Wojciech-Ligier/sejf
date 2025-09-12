@@ -1,6 +1,8 @@
-import './style.css';
-
 const app = document.querySelector<HTMLDivElement>('#app');
+
 if (app) {
-  app.innerHTML = `<h1>Hello Vite!</h1>`;
+  const panel = document.createElement('div');
+  panel.className = 'safe-panel';
+  panel.textContent = 'Safe panel placeholder';
+  app.appendChild(panel);
 }
