@@ -194,7 +194,7 @@ export interface SafeSnapshot {
 
 ### A. Foundations
 - [ ] Initialize Vite + TypeScript project, ESLint, Prettier.
-- [ ] Set up `index.html`, basic layout, and `app.css`.
+- [x] Set up `index.html`, basic layout, and `app.css`.
 - [ ] Define TypeScript types (`types.d.ts`).
 
 ### B. State & Persistence
@@ -256,7 +256,7 @@ export interface SafeSnapshot {
 
 > Format: `YYYY‑MM‑DD • short note • commit <hash>`
 
-- _No entries yet._
+2025-09-12 • set up basic layout and Vite scaffolding • commit acc45b2
 
 ---
 
