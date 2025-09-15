@@ -54,7 +54,7 @@ function scheduleTimer(): void {
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
-  async function promptPin(message: string): Promise<string | null> {
+async function promptPin(message: string): Promise<string | null> {
   return new Promise((resolve) => {
     const overlay = document.createElement('div');
     overlay.className = 'pin-overlay';
@@ -98,6 +98,81 @@ const app = document.querySelector<HTMLDivElement>('#app');
     input.focus();
     function cleanup() {
       document.body.removeChild(overlay);
+    }
+  });
+}
+
+function openTextDialog(
+  initialText: string,
+  onSave: (value: string) => void,
+): void {
+  const overlay = document.createElement('div');
+  overlay.className = 'settings-overlay';
+
+  const dialog = document.createElement('div');
+  dialog.className = 'settings-dialog text-dialog';
+
+  const title = document.createElement('h2');
+  title.className = 'text-dialog-title';
+  title.textContent = t('textDialogTitle');
+  dialog.appendChild(title);
+
+  const textarea = document.createElement('textarea');
+  textarea.value = initialText;
+  textarea.placeholder = t('secretPlaceholder');
+  dialog.appendChild(textarea);
+
+  const actions = document.createElement('div');
+  actions.className = 'settings-actions';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'close-btn';
+  cancelBtn.textContent = t('cancel');
+
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'close-btn';
+  saveBtn.textContent = t('save');
+
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+  dialog.appendChild(actions);
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  dialog.tabIndex = -1;
+  dialog.focus();
+  textarea.focus();
+
+  const onKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      cleanup();
+    }
+  };
+
+  document.addEventListener('keydown', onKeydown);
+
+  function cleanup(): void {
+    document.removeEventListener('keydown', onKeydown);
+    if (overlay.parentElement) {
+      document.body.removeChild(overlay);
+    }
+  }
+
+  cancelBtn.addEventListener('click', cleanup);
+
+  saveBtn.addEventListener('click', () => {
+    const value = textarea.value;
+    cleanup();
+    onSave(value);
+  });
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      cleanup();
     }
   });
 }
@@ -332,7 +407,11 @@ function renderOpen(): HTMLElement {
   const textBtn = document.createElement('button');
   textBtn.textContent = t('insertText');
   textBtn.addEventListener('click', () => {
-    textarea.focus();
+    openTextDialog(snapshot.content.text, (value) => {
+      snapshot.content.text = value;
+      saveSnapshot(snapshot);
+      render();
+    });
   });
   top.appendChild(textBtn);
 

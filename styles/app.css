@@ -288,6 +288,26 @@ body {
   justify-content: flex-end;
 }
 
+.text-dialog {
+  width: min(480px, 90vw);
+}
+
+.text-dialog-title {
+  margin: 0;
+}
+
+.text-dialog textarea {
+  min-height: 160px;
+  background: var(--panel-bright);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: var(--txt);
+  padding: 8px;
+  font-family: inherit;
+  font-size: 16px;
+  resize: vertical;
+}
+
 .destroyed-panel {
   align-items: center;
   justify-content: center;
