@@ -17,5 +17,10 @@
   "closeSafe": "Close safe",
   "setPin": "Set PIN",
   "confirmPin": "Confirm PIN",
-  "pinMismatch": "PINs do not match"
+  "pinMismatch": "PINs do not match",
+  "enterPin": "Enter PIN",
+  "openSafe": "Open safe",
+  "attemptsRemaining": "Attempts remaining",
+  "autodestructIn": "Autodestruct in",
+  "wrongPin": "Wrong PIN"
 }

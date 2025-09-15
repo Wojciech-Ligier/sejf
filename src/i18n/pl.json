@@ -17,5 +17,10 @@
   "closeSafe": "Zamknij sejf",
   "setPin": "Ustaw PIN",
   "confirmPin": "Potwierdź PIN",
-  "pinMismatch": "PIN nie pasuje"
+  "pinMismatch": "PIN nie pasuje",
+  "enterPin": "Wprowadź PIN",
+  "openSafe": "Otwórz sejf",
+  "attemptsRemaining": "Pozostałe próby",
+  "autodestructIn": "Autodestrukcja za",
+  "wrongPin": "Błędny PIN"
 }
