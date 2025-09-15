@@ -2,6 +2,7 @@
   --bg: #0b0d10;
   --panel: rgba(255, 255, 255, 0.06);
   --panel-bright: rgba(255, 255, 255, 0.12);
+  --panel-solid: #1b1e27;
   --txt: #e6edf3;
   --muted: #9aa6b2;
   --brand: #8a5cf6;
@@ -182,7 +183,7 @@ body {
 }
 
 .pin-dialog {
-  background: var(--panel);
+  background: var(--panel-solid);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--card-radius);
   padding: 16px;
@@ -202,6 +203,53 @@ body {
 }
 
 .pin-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-dialog {
+  background: var(--panel-solid);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--card-radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-dialog label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-dialog input,
+.settings-dialog select {
+  background: var(--panel-bright);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--txt);
+  padding: 8px;
+  font-size: 16px;
+}
+
+.settings-error {
+  color: #f87171;
+  font-size: 14px;
+}
+
+.settings-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
