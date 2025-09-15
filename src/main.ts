@@ -1,6 +1,6 @@
 import { loadSnapshot, saveSnapshot } from './persistence';
 import { reduce, spawnSafe, type SafeEvent } from './safeMachine';
-import type { SafeSnapshot } from './types';
+import type { Lang, SafeSnapshot } from './types';
 import { hashPin } from './pin';
 
 let snapshot: SafeSnapshot = loadSnapshot() ?? spawnSafe();
@@ -91,6 +91,102 @@ async function promptPin(message: string): Promise<string | null> {
   });
 }
 
+function openSettings(): void {
+  const overlay = document.createElement('div');
+  overlay.className = 'settings-overlay';
+  const dialog = document.createElement('div');
+  dialog.className = 'settings-dialog';
+  const form = document.createElement('form');
+  form.className = 'settings-form';
+
+  const langLabel = document.createElement('label');
+  langLabel.textContent = 'Język';
+  const langSelect = document.createElement('select');
+  langSelect.value = snapshot.settings.language;
+  const langs: [Lang, string][] = [
+    ['pl', 'Polski'],
+    ['en', 'English'],
+    ['it', 'Italiano'],
+  ];
+  for (const [code, name] of langs) {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = name;
+    langSelect.appendChild(opt);
+  }
+  langLabel.appendChild(langSelect);
+
+  const autoLabel = document.createElement('label');
+  autoLabel.textContent = 'Autodestrukcja (minuty)';
+  const autoInput = document.createElement('input');
+  autoInput.type = 'number';
+  autoInput.min = '1';
+  autoInput.max = '999';
+  autoInput.value = snapshot.settings.autodestructMinutes?.toString() ?? '';
+  autoLabel.appendChild(autoInput);
+
+  const limitLabel = document.createElement('label');
+  limitLabel.textContent = 'Limit prób PIN';
+  const limitInput = document.createElement('input');
+  limitInput.type = 'number';
+  limitInput.min = '1';
+  limitInput.max = '999';
+  limitInput.value = snapshot.settings.pinAttemptsLimit?.toString() ?? '';
+  limitLabel.appendChild(limitInput);
+
+  const survivalLabel = document.createElement('label');
+  const survivalInput = document.createElement('input');
+  survivalInput.type = 'checkbox';
+  survivalInput.checked = snapshot.settings.survivalEnabled;
+  survivalLabel.appendChild(survivalInput);
+  survivalLabel.appendChild(
+    document.createTextNode(' Możliwy przetrwanie eksplozji'),
+  );
+
+  const actions = document.createElement('div');
+  actions.className = 'settings-actions';
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'close-btn';
+  cancelBtn.textContent = 'Anuluj';
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'submit';
+  saveBtn.className = 'close-btn';
+  saveBtn.textContent = 'Zapisz';
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+
+  form.appendChild(langLabel);
+  form.appendChild(autoLabel);
+  form.appendChild(limitLabel);
+  form.appendChild(survivalLabel);
+  form.appendChild(actions);
+
+  dialog.appendChild(form);
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+  langSelect.focus();
+
+  function cleanup(): void {
+    document.body.removeChild(overlay);
+    render();
+  }
+
+  cancelBtn.addEventListener('click', cleanup);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    snapshot.settings.language = langSelect.value as Lang;
+    const auto = Number(autoInput.value);
+    snapshot.settings.autodestructMinutes = autoInput.value ? auto : undefined;
+    const limit = Number(limitInput.value);
+    snapshot.settings.pinAttemptsLimit = limitInput.value ? limit : undefined;
+    snapshot.settings.survivalEnabled = survivalInput.checked;
+    saveSnapshot(snapshot);
+    cleanup();
+  });
+}
+
 function render(): void {
   if (!app) return;
   app.innerHTML = '';
@@ -121,9 +217,7 @@ function renderOpen(): HTMLElement {
   const settingsBtn = document.createElement('button');
   settingsBtn.className = 'settings-icon';
   settingsBtn.textContent = '⚙️';
-  settingsBtn.addEventListener('click', () => {
-    console.log('open settings not implemented');
-  });
+  settingsBtn.addEventListener('click', openSettings);
   panel.appendChild(settingsBtn);
 
   const icon = document.createElement('img');
