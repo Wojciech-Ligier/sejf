@@ -272,8 +272,10 @@ function render(): void {
   app.innerHTML = '';
   if (snapshot.runtime.state === 'open') {
     app.appendChild(renderOpen());
-  } else {
+  } else if (snapshot.runtime.state === 'closed') {
     app.appendChild(renderClosed());
+  } else {
+    app.appendChild(renderDestroyed());
   }
 }
 
@@ -295,10 +297,7 @@ function renderOpen(): HTMLElement {
 
   const state = document.createElement('p');
   state.className = 'safe-state';
-    state.textContent =
-      snapshot.runtime.state === 'open'
-        ? t('safeOpen')
-        : t('safeClosed');
+  state.textContent = t('safeOpen');
   panel.appendChild(state);
 
   const content = document.createElement('div');
@@ -324,21 +323,21 @@ function renderOpen(): HTMLElement {
 
   const textarea = document.createElement('textarea');
   textarea.value = snapshot.content.text;
-    textarea.placeholder = t('secretPlaceholder');
+  textarea.placeholder = t('secretPlaceholder');
   textarea.addEventListener('input', () => {
     snapshot.content.text = textarea.value;
     saveSnapshot(snapshot);
   });
 
-    const textBtn = document.createElement('button');
-    textBtn.textContent = t('insertText');
+  const textBtn = document.createElement('button');
+  textBtn.textContent = t('insertText');
   textBtn.addEventListener('click', () => {
     textarea.focus();
   });
   top.appendChild(textBtn);
 
-    const imageBtn = document.createElement('button');
-    imageBtn.textContent = t('chooseImage');
+  const imageBtn = document.createElement('button');
+  imageBtn.textContent = t('chooseImage');
   imageBtn.addEventListener('click', () => fileInput.click());
   top.appendChild(imageBtn);
 
@@ -388,6 +387,13 @@ function renderClosed(): HTMLElement {
   state.className = 'safe-state';
   state.textContent = t('safeClosed');
   panel.appendChild(state);
+
+  if (snapshot.runtime.explosionResult === 'survived') {
+    const survived = document.createElement('p');
+    survived.className = 'explosion-message';
+    survived.textContent = t('contentSurvived');
+    panel.appendChild(survived);
+  }
 
   const label = document.createElement('label');
   label.textContent = t('enterPin');
@@ -444,6 +450,44 @@ function renderClosed(): HTMLElement {
     }
   });
   panel.appendChild(openBtn);
+
+  const blowBtn = document.createElement('button');
+  blowBtn.className = 'close-btn danger-btn';
+  blowBtn.textContent = t('blowSafe');
+  blowBtn.addEventListener('click', () => {
+    dispatch({ type: 'explode' });
+  });
+  panel.appendChild(blowBtn);
+
+  return panel;
+}
+
+function renderDestroyed(): HTMLElement {
+  const panel = document.createElement('div');
+  panel.className = 'safe-panel destroyed-panel';
+
+  const emoji = document.createElement('div');
+  emoji.className = 'destroyed-emoji';
+  emoji.textContent = '💥';
+  panel.appendChild(emoji);
+
+  const title = document.createElement('h2');
+  title.className = 'destroyed-title';
+  title.textContent = t('safeDestroyed');
+  panel.appendChild(title);
+
+  const description = document.createElement('p');
+  description.className = 'destroyed-text';
+  description.textContent = t('safeDestroyedDescription');
+  panel.appendChild(description);
+
+  const newSafeBtn = document.createElement('button');
+  newSafeBtn.className = 'close-btn';
+  newSafeBtn.textContent = t('startNewSafe');
+  newSafeBtn.addEventListener('click', () => {
+    dispatch({ type: 'startNew' });
+  });
+  panel.appendChild(newSafeBtn);
 
   return panel;
 }

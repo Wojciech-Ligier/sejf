@@ -6,7 +6,8 @@ export type SafeEvent =
   | { type: 'wrongPin' }
   | { type: 'tick'; now: number }
   | { type: 'explode' }
-  | { type: 'survive' };
+  | { type: 'survive' }
+  | { type: 'startNew' };
 
 export function spawnSafe(): SafeSnapshot {
   return {
@@ -93,10 +94,25 @@ export function reduce(
     }
 
     case 'explode': {
+      if (snapshot.runtime.state === 'destroyed') return [snapshot, []];
       if (snapshot.settings.survivalEnabled && random() < 0.1) {
         return [snapshot, [{ type: 'survive' }]];
       }
-      return [spawnSafe(), []];
+      return [
+        {
+          ...snapshot,
+          content: { text: '' },
+          settings: {
+            ...snapshot.settings,
+          },
+          runtime: {
+            state: 'destroyed',
+            attemptsMade: 0,
+            explosionResult: 'destroyed',
+          },
+        },
+        [],
+      ];
     }
 
     case 'survive': {
@@ -108,10 +124,16 @@ export function reduce(
             ...snapshot.runtime,
             attemptsMade: 0,
             destructAt: undefined,
+            explosionResult: 'survived',
           },
         },
         [],
       ];
+    }
+
+    case 'startNew': {
+      if (snapshot.runtime.state !== 'destroyed') return [snapshot, []];
+      return [spawnSafe(), []];
     }
   }
 }
