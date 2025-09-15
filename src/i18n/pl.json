@@ -22,5 +22,10 @@
   "openSafe": "Otwórz sejf",
   "attemptsRemaining": "Pozostałe próby",
   "autodestructIn": "Autodestrukcja za",
-  "wrongPin": "Błędny PIN"
+  "wrongPin": "Błędny PIN",
+  "blowSafe": "Wysadź sejf",
+  "safeDestroyed": "Sejf został zniszczony",
+  "safeDestroyedDescription": "Wszystko w środku przepadło. Zacznij od nowego sejfu.",
+  "startNewSafe": "Rozpocznij nowy sejf",
+  "contentSurvived": "Zawartość przetrwała eksplozję!"
 }

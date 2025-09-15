@@ -22,5 +22,10 @@
   "openSafe": "Apri cassaforte",
   "attemptsRemaining": "Tentativi rimasti",
   "autodestructIn": "Autodistruzione tra",
-  "wrongPin": "PIN errato"
+  "wrongPin": "PIN errato",
+  "blowSafe": "Fai esplodere la cassaforte",
+  "safeDestroyed": "La cassaforte è stata distrutta",
+  "safeDestroyedDescription": "Tutto il contenuto è andato perduto. Inizia con una nuova cassaforte.",
+  "startNewSafe": "Avvia nuova cassaforte",
+  "contentSurvived": "Il contenuto è sopravvissuto all'esplosione!"
 }

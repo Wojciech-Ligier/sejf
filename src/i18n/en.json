@@ -22,5 +22,10 @@
   "openSafe": "Open safe",
   "attemptsRemaining": "Attempts remaining",
   "autodestructIn": "Autodestruct in",
-  "wrongPin": "Wrong PIN"
+  "wrongPin": "Wrong PIN",
+  "blowSafe": "Blow up safe",
+  "safeDestroyed": "The safe was destroyed",
+  "safeDestroyedDescription": "Everything inside is gone. Start over with a new safe.",
+  "startNewSafe": "Start new safe",
+  "contentSurvived": "The contents survived the explosion!"
 }
