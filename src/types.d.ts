@@ -12,7 +12,7 @@ export interface SafeSettings {
   pinAttemptsLimit?: number; // positive integer, undefined = unlimited
 }
 
-export type SafeState = 'open' | 'closed';
+export type SafeState = 'open' | 'closed' | 'destroyed';
 
 export interface SafeRuntime {
   state: SafeState;
@@ -20,6 +20,7 @@ export interface SafeRuntime {
   attemptsMade: number; // wrong attempts in current closed cycle
   closedAt?: number; // epoch ms
   destructAt?: number; // epoch ms, if timer armed
+  explosionResult?: 'survived' | 'destroyed';
 }
 
 export interface SafeSnapshot {
