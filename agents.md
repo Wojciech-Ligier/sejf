@@ -294,6 +294,7 @@ export interface SafeSnapshot {
 - 2025-09-15 • replace safe icon with new image • commit 36bdfca
 - 2025-09-15 • remove close button, add settings gear, show state text • commit 5c39310
 - 2025-09-15 • prevent mobile zoom on text inputs • commit 4dc974a
+- 2025-09-15 • enlarge safe icon • commit 433a43a
 
 ## 14) License
 
