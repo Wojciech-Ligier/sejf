@@ -59,11 +59,27 @@ function renderOpen(): HTMLElement {
   const panel = document.createElement('div');
   panel.className = 'safe-panel';
 
+  const settingsBtn = document.createElement('button');
+  settingsBtn.className = 'settings-icon';
+  settingsBtn.textContent = '⚙️';
+  settingsBtn.addEventListener('click', () => {
+    console.log('open settings not implemented');
+  });
+  panel.appendChild(settingsBtn);
+
   const icon = document.createElement('img');
   icon.src = '/safe.webp';
   icon.alt = '';
   icon.className = 'safe-icon';
   panel.appendChild(icon);
+
+  const state = document.createElement('p');
+  state.className = 'safe-state';
+  state.textContent =
+    snapshot.runtime.state === 'open'
+      ? 'Sejf jest otwarty'
+      : 'Sejf jest zamknięty';
+  panel.appendChild(state);
 
   const content = document.createElement('div');
   content.className = 'safe-content';
@@ -117,24 +133,6 @@ function renderOpen(): HTMLElement {
     content.appendChild(img);
   }
 
-  const actions = document.createElement('div');
-  actions.className = 'safe-actions';
-
-  const settingsBtn = document.createElement('button');
-  settingsBtn.textContent = 'Ustawienia';
-  settingsBtn.addEventListener('click', () => {
-    console.log('open settings not implemented');
-  });
-  actions.appendChild(settingsBtn);
-
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'Zamknij';
-  closeBtn.addEventListener('click', () => {
-    console.log('close not implemented');
-  });
-  actions.appendChild(closeBtn);
-
-  content.appendChild(actions);
   panel.appendChild(content);
 
   return panel;
