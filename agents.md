@@ -293,6 +293,7 @@ export interface SafeSnapshot {
 - 2025-09-15 • add placeholder for textarea • commit 5510fd8
 - 2025-09-15 • replace safe icon with new image • commit 36bdfca
 - 2025-09-15 • remove close button, add settings gear, show state text • commit 5c39310
+- 2025-09-15 • prevent mobile zoom on text inputs • commit 4dc974a
 
 ## 14) License
 
