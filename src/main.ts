@@ -88,6 +88,7 @@ function renderOpen(): HTMLElement {
 
   const textarea = document.createElement('textarea');
   textarea.value = snapshot.content.text;
+  textarea.placeholder = 'Twój największy sekret';
   textarea.addEventListener('input', () => {
     snapshot.content.text = textarea.value;
     saveSnapshot(snapshot);
