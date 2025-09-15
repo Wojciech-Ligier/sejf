@@ -1,6 +1,7 @@
 import { loadSnapshot, saveSnapshot } from './persistence';
 import { reduce, spawnSafe, type SafeEvent } from './safeMachine';
 import type { SafeSnapshot } from './types';
+import { hashPin } from './pin';
 
 let snapshot: SafeSnapshot = loadSnapshot() ?? spawnSafe();
 saveSnapshot(snapshot);
@@ -134,6 +135,22 @@ function renderOpen(): HTMLElement {
   }
 
   panel.appendChild(content);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'close-btn';
+  closeBtn.textContent = 'Zamknij sejf';
+  closeBtn.addEventListener('click', async () => {
+    const pin = prompt('Ustaw PIN');
+    if (pin === null) return;
+    const confirmPin = prompt('Potwierdź PIN');
+    if (confirmPin === null || confirmPin !== pin) {
+      alert('PIN nie pasuje');
+      return;
+    }
+    const pinHash = await hashPin(pin);
+    dispatch({ type: 'close', pinHash, now: Date.now() });
+  });
+  panel.appendChild(closeBtn);
 
   return panel;
 }
