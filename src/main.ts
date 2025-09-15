@@ -2,8 +2,10 @@ import { loadSnapshot, saveSnapshot } from './persistence';
 import { reduce, spawnSafe, type SafeEvent } from './safeMachine';
 import type { Lang, SafeSnapshot } from './types';
 import { hashPin } from './pin';
+import { t, setLang } from './i18n';
 
 let snapshot: SafeSnapshot = loadSnapshot() ?? spawnSafe();
+setLang(snapshot.settings.language);
 saveSnapshot(snapshot);
 
 function dispatch(event: SafeEvent): void {
@@ -14,6 +16,7 @@ function dispatch(event: SafeEvent): void {
     snapshot = next;
     queue.push(...emitted);
   }
+  setLang(snapshot.settings.language);
   saveSnapshot(snapshot);
   scheduleTimer();
   render();
@@ -43,7 +46,7 @@ function scheduleTimer(): void {
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
-async function promptPin(message: string): Promise<string | null> {
+  async function promptPin(message: string): Promise<string | null> {
   return new Promise((resolve) => {
     const overlay = document.createElement('div');
     overlay.className = 'pin-overlay';
@@ -58,12 +61,12 @@ async function promptPin(message: string): Promise<string | null> {
     input.addEventListener('input', () => {
       input.value = input.value.replace(/\D/g, '');
     });
-    const okBtn = document.createElement('button');
-    okBtn.className = 'close-btn';
-    okBtn.textContent = 'OK';
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'close-btn';
-    cancelBtn.textContent = 'Anuluj';
+      const okBtn = document.createElement('button');
+      okBtn.className = 'close-btn';
+      okBtn.textContent = t('ok');
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'close-btn';
+      cancelBtn.textContent = t('cancel');
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') okBtn.click();
     });
@@ -100,7 +103,8 @@ function openSettings(): void {
   form.className = 'settings-form';
 
   const langLabel = document.createElement('label');
-  langLabel.textContent = 'Język';
+  const langText = document.createTextNode(t('language'));
+  langLabel.appendChild(langText);
   const langSelect = document.createElement('select');
   langSelect.value = snapshot.settings.language;
   const langs: [Lang, string][] = [
@@ -117,7 +121,8 @@ function openSettings(): void {
   langLabel.appendChild(langSelect);
 
   const autoLabel = document.createElement('label');
-  autoLabel.textContent = 'Autodestrukcja (minuty)';
+  const autoText = document.createTextNode(t('autodestructMinutes'));
+  autoLabel.appendChild(autoText);
   const autoInput = document.createElement('input');
   autoInput.type = 'number';
   autoInput.inputMode = 'numeric';
@@ -130,7 +135,7 @@ function openSettings(): void {
   autoInput.addEventListener('input', () => {
     const val = Number(autoInput.value);
     if (autoInput.value && (!Number.isInteger(val) || val < 1 || val > 999)) {
-      autoErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+      autoErr.textContent = t('valueRangeError');
     } else {
       autoErr.textContent = '';
     }
@@ -139,7 +144,8 @@ function openSettings(): void {
   autoLabel.appendChild(autoErr);
 
   const limitLabel = document.createElement('label');
-  limitLabel.textContent = 'Limit prób PIN';
+  const limitText = document.createTextNode(t('pinAttemptsLimit'));
+  limitLabel.appendChild(limitText);
   const limitInput = document.createElement('input');
   limitInput.type = 'number';
   limitInput.inputMode = 'numeric';
@@ -152,7 +158,7 @@ function openSettings(): void {
   limitInput.addEventListener('input', () => {
     const val = Number(limitInput.value);
     if (limitInput.value && (!Number.isInteger(val) || val < 1 || val > 999)) {
-      limitErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+      limitErr.textContent = t('valueRangeError');
     } else {
       limitErr.textContent = '';
     }
@@ -165,20 +171,17 @@ function openSettings(): void {
   survivalInput.type = 'checkbox';
   survivalInput.checked = snapshot.settings.survivalEnabled;
   survivalLabel.appendChild(survivalInput);
-  survivalLabel.appendChild(
-    document.createTextNode(' Możliwy przetrwanie eksplozji'),
-  );
+  const survivalText = document.createTextNode(' ' + t('survivalOption'));
+  survivalLabel.appendChild(survivalText);
 
   const actions = document.createElement('div');
   actions.className = 'settings-actions';
   const cancelBtn = document.createElement('button');
   cancelBtn.type = 'button';
   cancelBtn.className = 'close-btn';
-  cancelBtn.textContent = 'Anuluj';
   const saveBtn = document.createElement('button');
   saveBtn.type = 'submit';
   saveBtn.className = 'close-btn';
-  saveBtn.textContent = 'Zapisz';
   actions.appendChild(cancelBtn);
   actions.appendChild(saveBtn);
 
@@ -199,7 +202,28 @@ function openSettings(): void {
     render();
   }
 
+  function updateTexts(): void {
+    langText.textContent = t('language');
+    autoText.textContent = t('autodestructMinutes');
+    limitText.textContent = t('pinAttemptsLimit');
+    survivalText.textContent = ' ' + t('survivalOption');
+    cancelBtn.textContent = t('cancel');
+    saveBtn.textContent = t('save');
+    if (autoErr.textContent) autoErr.textContent = t('valueRangeError');
+    if (limitErr.textContent) limitErr.textContent = t('valueRangeError');
+  }
+
+  updateTexts();
+
   cancelBtn.addEventListener('click', cleanup);
+
+  langSelect.addEventListener('change', () => {
+    snapshot.settings.language = langSelect.value as Lang;
+    setLang(snapshot.settings.language);
+    saveSnapshot(snapshot);
+    render();
+    updateTexts();
+  });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -208,7 +232,7 @@ function openSettings(): void {
       autoInput.value &&
       (!Number.isInteger(autoVal) || autoVal < 1 || autoVal > 999)
     ) {
-      autoErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+      autoErr.textContent = t('valueRangeError');
       autoInput.focus();
       return;
     }
@@ -217,11 +241,12 @@ function openSettings(): void {
       limitInput.value &&
       (!Number.isInteger(limitVal) || limitVal < 1 || limitVal > 999)
     ) {
-      limitErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+      limitErr.textContent = t('valueRangeError');
       limitInput.focus();
       return;
     }
     snapshot.settings.language = langSelect.value as Lang;
+    setLang(snapshot.settings.language);
     snapshot.settings.autodestructMinutes = autoInput.value
       ? autoVal
       : undefined;
@@ -243,11 +268,11 @@ function render(): void {
     const panel = document.createElement('div');
     panel.className = 'safe-panel';
     const text = document.createElement('p');
-    text.textContent = 'Closed state not implemented';
+    text.textContent = t('closedStateNotImplemented');
     panel.appendChild(text);
     const restartBtn = document.createElement('button');
     restartBtn.className = 'close-btn';
-    restartBtn.textContent = 'Restartuj aplikację';
+    restartBtn.textContent = t('restartApp');
     restartBtn.addEventListener('click', () => {
       localStorage.clear();
       location.reload();
@@ -275,10 +300,10 @@ function renderOpen(): HTMLElement {
 
   const state = document.createElement('p');
   state.className = 'safe-state';
-  state.textContent =
-    snapshot.runtime.state === 'open'
-      ? 'Sejf jest otwarty'
-      : 'Sejf jest zamknięty';
+    state.textContent =
+      snapshot.runtime.state === 'open'
+        ? t('safeOpen')
+        : t('safeClosed');
   panel.appendChild(state);
 
   const content = document.createElement('div');
@@ -304,21 +329,21 @@ function renderOpen(): HTMLElement {
 
   const textarea = document.createElement('textarea');
   textarea.value = snapshot.content.text;
-  textarea.placeholder = 'Twój największy sekret';
+    textarea.placeholder = t('secretPlaceholder');
   textarea.addEventListener('input', () => {
     snapshot.content.text = textarea.value;
     saveSnapshot(snapshot);
   });
 
-  const textBtn = document.createElement('button');
-  textBtn.textContent = 'Włóż tekst';
+    const textBtn = document.createElement('button');
+    textBtn.textContent = t('insertText');
   textBtn.addEventListener('click', () => {
     textarea.focus();
   });
   top.appendChild(textBtn);
 
-  const imageBtn = document.createElement('button');
-  imageBtn.textContent = 'Wybierz obrazek';
+    const imageBtn = document.createElement('button');
+    imageBtn.textContent = t('chooseImage');
   imageBtn.addEventListener('click', () => fileInput.click());
   top.appendChild(imageBtn);
 
@@ -337,13 +362,13 @@ function renderOpen(): HTMLElement {
 
   const closeBtn = document.createElement('button');
   closeBtn.className = 'close-btn';
-  closeBtn.textContent = 'Zamknij sejf';
+  closeBtn.textContent = t('closeSafe');
   closeBtn.addEventListener('click', async () => {
-    const pin = await promptPin('Ustaw PIN');
+    const pin = await promptPin(t('setPin'));
     if (pin === null || pin === '') return;
-    const confirmPin = await promptPin('Potwierdź PIN');
+    const confirmPin = await promptPin(t('confirmPin'));
     if (confirmPin === null || confirmPin !== pin) {
-      alert('PIN nie pasuje');
+      alert(t('pinMismatch'));
       return;
     }
     const pinHash = await hashPin(pin);
