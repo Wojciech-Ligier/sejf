@@ -2,8 +2,13 @@ import { loadSnapshot, saveSnapshot } from './persistence';
 import { reduce, spawnSafe, type SafeEvent } from './safeMachine';
 import type { SafeSnapshot } from './types';
 import { hashPin } from './pin';
+import { t, setLang, defaultLang } from './i18n';
 
 let snapshot: SafeSnapshot = loadSnapshot() ?? spawnSafe();
+if (!snapshot.settings.language) {
+  snapshot.settings.language = defaultLang;
+}
+setLang(snapshot.settings.language);
 saveSnapshot(snapshot);
 
 function dispatch(event: SafeEvent): void {
@@ -12,6 +17,7 @@ function dispatch(event: SafeEvent): void {
     const e = queue.shift()!;
     const [next, emitted] = reduce(snapshot, e);
     snapshot = next;
+    setLang(snapshot.settings.language);
     queue.push(...emitted);
   }
   saveSnapshot(snapshot);
@@ -60,10 +66,10 @@ async function promptPin(message: string): Promise<string | null> {
     });
     const okBtn = document.createElement('button');
     okBtn.className = 'close-btn';
-    okBtn.textContent = 'OK';
+    okBtn.textContent = t('ok');
     const cancelBtn = document.createElement('button');
     cancelBtn.className = 'close-btn';
-    cancelBtn.textContent = 'Anuluj';
+    cancelBtn.textContent = t('cancel');
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') okBtn.click();
     });
@@ -100,11 +106,11 @@ function render(): void {
     const panel = document.createElement('div');
     panel.className = 'safe-panel';
     const text = document.createElement('p');
-    text.textContent = 'Closed state not implemented';
+    text.textContent = t('closedNotImplemented');
     panel.appendChild(text);
     const restartBtn = document.createElement('button');
     restartBtn.className = 'close-btn';
-    restartBtn.textContent = 'Restartuj aplikację';
+    restartBtn.textContent = t('restartApp');
     restartBtn.addEventListener('click', () => {
       localStorage.clear();
       location.reload();
@@ -136,8 +142,8 @@ function renderOpen(): HTMLElement {
   state.className = 'safe-state';
   state.textContent =
     snapshot.runtime.state === 'open'
-      ? 'Sejf jest otwarty'
-      : 'Sejf jest zamknięty';
+      ? t('safeOpen')
+      : t('safeClosed');
   panel.appendChild(state);
 
   const content = document.createElement('div');
@@ -163,21 +169,21 @@ function renderOpen(): HTMLElement {
 
   const textarea = document.createElement('textarea');
   textarea.value = snapshot.content.text;
-  textarea.placeholder = 'Twój największy sekret';
+  textarea.placeholder = t('secretPlaceholder');
   textarea.addEventListener('input', () => {
     snapshot.content.text = textarea.value;
     saveSnapshot(snapshot);
   });
 
   const textBtn = document.createElement('button');
-  textBtn.textContent = 'Włóż tekst';
+  textBtn.textContent = t('insertText');
   textBtn.addEventListener('click', () => {
     textarea.focus();
   });
   top.appendChild(textBtn);
 
   const imageBtn = document.createElement('button');
-  imageBtn.textContent = 'Wybierz obrazek';
+  imageBtn.textContent = t('chooseImage');
   imageBtn.addEventListener('click', () => fileInput.click());
   top.appendChild(imageBtn);
 
@@ -196,13 +202,13 @@ function renderOpen(): HTMLElement {
 
   const closeBtn = document.createElement('button');
   closeBtn.className = 'close-btn';
-  closeBtn.textContent = 'Zamknij sejf';
+  closeBtn.textContent = t('closeSafe');
   closeBtn.addEventListener('click', async () => {
-    const pin = await promptPin('Ustaw PIN');
+    const pin = await promptPin(t('setPin'));
     if (pin === null || pin === '') return;
-    const confirmPin = await promptPin('Potwierdź PIN');
+    const confirmPin = await promptPin(t('confirmPin'));
     if (confirmPin === null || confirmPin !== pin) {
-      alert('PIN nie pasuje');
+      alert(t('pinMismatch'));
       return;
     }
     const pinHash = await hashPin(pin);

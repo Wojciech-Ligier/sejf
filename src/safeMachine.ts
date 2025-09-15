@@ -13,7 +13,7 @@ export function spawnSafe(): SafeSnapshot {
     id: crypto.randomUUID(),
     content: { text: '' },
     settings: {
-      language: 'en',
+      language: 'pl',
       survivalEnabled: false,
     },
     runtime: {
