@@ -1,6 +1,10 @@
 name = "safe-game"
-pages_build_output_dir = "./dist"
+main = "worker.ts"
 compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build"
 
 [assets]
 directory = "./dist"
+binding = "ASSETS"
