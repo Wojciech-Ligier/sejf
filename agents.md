@@ -291,6 +291,7 @@ export interface SafeSnapshot {
 - 2025-09-13 • switch to worker deploy and assets binding • commit 11c7359
 - 2025-09-13 • fix assets directory field for worker deploy • commit 5a71ced
 - 2025-09-15 • add placeholder for textarea • commit 5510fd8
+- 2025-09-15 • replace safe icon asset • commit 47259b0
 
 ## 14) License
 

@@ -60,7 +60,7 @@ function renderOpen(): HTMLElement {
   panel.className = 'safe-panel';
 
   const icon = document.createElement('img');
-  icon.src = '/safe.svg';
+  icon.src = '/img/safe.svg';
   icon.alt = '';
   icon.className = 'safe-icon';
   panel.appendChild(icon);
