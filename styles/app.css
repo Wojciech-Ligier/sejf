@@ -58,7 +58,7 @@ body {
   background: var(--panel);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0;
-  padding: 24px;
+  padding: 12px 24px 24px;
   box-shadow: var(--shadow);
   width: 100%;
   height: 100%;
@@ -108,6 +108,24 @@ body {
   box-shadow: inset 0 0 8px rgba(45, 212, 191, 0.6);
 }
 
+.close-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--panel-bright);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--txt);
+  font-weight: 600;
+  box-shadow: inset 0 0 8px rgba(45, 212, 191, 0.4);
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.close-btn:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 8px rgba(45, 212, 191, 0.6);
+}
+
 .safe-content textarea {
   flex: 1;
   width: 100%;
@@ -152,4 +170,39 @@ body {
 .safe-state {
   text-align: center;
   margin: 0;
+}
+
+.pin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-dialog {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--card-radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pin-dialog input {
+  background: var(--panel-bright);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--txt);
+  padding: 8px;
+  font-size: 16px;
+}
+
+.pin-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
 }

@@ -295,6 +295,8 @@ export interface SafeSnapshot {
 - 2025-09-15 • remove close button, add settings gear, show state text • commit 5c39310
 - 2025-09-15 • prevent mobile zoom on text inputs • commit 4dc974a
 - 2025-09-15 • enlarge safe icon • commit 433a43a
+- 2025-09-15 • add close button and align safe panel • commit 2ab0094
+- 2025-09-15 • add restart button and numeric PIN dialog • commit 309e8a1
 
 ## 14) License
 

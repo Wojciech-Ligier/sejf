@@ -1,6 +1,7 @@
 import { loadSnapshot, saveSnapshot } from './persistence';
 import { reduce, spawnSafe, type SafeEvent } from './safeMachine';
 import type { SafeSnapshot } from './types';
+import { hashPin } from './pin';
 
 let snapshot: SafeSnapshot = loadSnapshot() ?? spawnSafe();
 saveSnapshot(snapshot);
@@ -42,6 +43,54 @@ function scheduleTimer(): void {
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
+async function promptPin(message: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'pin-overlay';
+    const dialog = document.createElement('div');
+    dialog.className = 'pin-dialog';
+    const label = document.createElement('p');
+    label.textContent = message;
+    const input = document.createElement('input');
+    input.type = 'password';
+    input.inputMode = 'numeric';
+    input.pattern = '\\d*';
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/\D/g, '');
+    });
+    const okBtn = document.createElement('button');
+    okBtn.className = 'close-btn';
+    okBtn.textContent = 'OK';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'close-btn';
+    cancelBtn.textContent = 'Anuluj';
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') okBtn.click();
+    });
+    okBtn.addEventListener('click', () => {
+      cleanup();
+      resolve(input.value);
+    });
+    cancelBtn.addEventListener('click', () => {
+      cleanup();
+      resolve(null);
+    });
+    const buttons = document.createElement('div');
+    buttons.className = 'pin-actions';
+    buttons.appendChild(okBtn);
+    buttons.appendChild(cancelBtn);
+    dialog.appendChild(label);
+    dialog.appendChild(input);
+    dialog.appendChild(buttons);
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    input.focus();
+    function cleanup() {
+      document.body.removeChild(overlay);
+    }
+  });
+}
+
 function render(): void {
   if (!app) return;
   app.innerHTML = '';
@@ -50,7 +99,17 @@ function render(): void {
   } else {
     const panel = document.createElement('div');
     panel.className = 'safe-panel';
-    panel.textContent = 'Closed state not implemented';
+    const text = document.createElement('p');
+    text.textContent = 'Closed state not implemented';
+    panel.appendChild(text);
+    const restartBtn = document.createElement('button');
+    restartBtn.className = 'close-btn';
+    restartBtn.textContent = 'Restartuj aplikację';
+    restartBtn.addEventListener('click', () => {
+      localStorage.clear();
+      location.reload();
+    });
+    panel.appendChild(restartBtn);
     app.appendChild(panel);
   }
 }
@@ -134,6 +193,22 @@ function renderOpen(): HTMLElement {
   }
 
   panel.appendChild(content);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'close-btn';
+  closeBtn.textContent = 'Zamknij sejf';
+  closeBtn.addEventListener('click', async () => {
+    const pin = await promptPin('Ustaw PIN');
+    if (pin === null || pin === '') return;
+    const confirmPin = await promptPin('Potwierdź PIN');
+    if (confirmPin === null || confirmPin !== pin) {
+      alert('PIN nie pasuje');
+      return;
+    }
+    const pinHash = await hashPin(pin);
+    dispatch({ type: 'close', pinHash, now: Date.now() });
+  });
+  panel.appendChild(closeBtn);
 
   return panel;
 }
