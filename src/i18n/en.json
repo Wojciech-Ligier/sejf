@@ -1,0 +1,15 @@
+{
+  "closedNotImplemented": "Closed state not implemented",
+  "restartApp": "Restart app",
+  "safeOpen": "The safe is open",
+  "safeClosed": "The safe is closed",
+  "secretPlaceholder": "Your biggest secret",
+  "insertText": "Insert text",
+  "chooseImage": "Choose image",
+  "closeSafe": "Close safe",
+  "setPin": "Set PIN",
+  "confirmPin": "Confirm PIN",
+  "pinMismatch": "PIN does not match",
+  "ok": "OK",
+  "cancel": "Cancel"
+}
