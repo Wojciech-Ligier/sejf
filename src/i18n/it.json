@@ -17,5 +17,10 @@
   "closeSafe": "Chiudi cassaforte",
   "setPin": "Imposta PIN",
   "confirmPin": "Conferma PIN",
-  "pinMismatch": "Il PIN non corrisponde"
+  "pinMismatch": "Il PIN non corrisponde",
+  "enterPin": "Inserisci PIN",
+  "openSafe": "Apri cassaforte",
+  "attemptsRemaining": "Tentativi rimasti",
+  "autodestructIn": "Autodistruzione tra",
+  "wrongPin": "PIN errato"
 }

@@ -23,23 +23,31 @@ function dispatch(event: SafeEvent): void {
 }
 
 let timerId: number | undefined;
+let countdownId: number | undefined;
 
 function scheduleTimer(): void {
   if (timerId !== undefined) {
     clearTimeout(timerId);
     timerId = undefined;
   }
-  if (
-    snapshot.runtime.state === 'closed' &&
-    snapshot.runtime.destructAt !== undefined
-  ) {
-    const delay = snapshot.runtime.destructAt - Date.now();
-    if (delay <= 0) {
-      dispatch({ type: 'tick', now: Date.now() });
-    } else {
-      timerId = window.setTimeout(() => {
+  if (countdownId !== undefined) {
+    clearInterval(countdownId);
+    countdownId = undefined;
+  }
+  if (snapshot.runtime.state === 'closed') {
+    const destructAt = snapshot.runtime.destructAt;
+    if (destructAt !== undefined) {
+      const delay = destructAt - Date.now();
+      if (delay <= 0) {
         dispatch({ type: 'tick', now: Date.now() });
-      }, delay);
+      } else {
+        timerId = window.setTimeout(() => {
+          dispatch({ type: 'tick', now: Date.now() });
+        }, delay);
+        countdownId = window.setInterval(() => {
+          render();
+        }, 1000);
+      }
     }
   }
 }
@@ -265,20 +273,7 @@ function render(): void {
   if (snapshot.runtime.state === 'open') {
     app.appendChild(renderOpen());
   } else {
-    const panel = document.createElement('div');
-    panel.className = 'safe-panel';
-    const text = document.createElement('p');
-    text.textContent = t('closedStateNotImplemented');
-    panel.appendChild(text);
-    const restartBtn = document.createElement('button');
-    restartBtn.className = 'close-btn';
-    restartBtn.textContent = t('restartApp');
-    restartBtn.addEventListener('click', () => {
-      localStorage.clear();
-      location.reload();
-    });
-    panel.appendChild(restartBtn);
-    app.appendChild(panel);
+    app.appendChild(renderClosed());
   }
 }
 
@@ -375,6 +370,80 @@ function renderOpen(): HTMLElement {
     dispatch({ type: 'close', pinHash, now: Date.now() });
   });
   panel.appendChild(closeBtn);
+
+  return panel;
+}
+
+function renderClosed(): HTMLElement {
+  const panel = document.createElement('div');
+  panel.className = 'safe-panel';
+
+  const icon = document.createElement('img');
+  icon.src = '/safe.webp';
+  icon.alt = '';
+  icon.className = 'safe-icon';
+  panel.appendChild(icon);
+
+  const state = document.createElement('p');
+  state.className = 'safe-state';
+  state.textContent = t('safeClosed');
+  panel.appendChild(state);
+
+  const label = document.createElement('label');
+  label.textContent = t('enterPin');
+  label.className = 'closed-info';
+  const input = document.createElement('input');
+  input.type = 'password';
+  input.inputMode = 'numeric';
+  input.pattern = '\\d*';
+  input.className = 'pin-input';
+  input.addEventListener('input', () => {
+    input.value = input.value.replace(/\D/g, '');
+  });
+  const openBtn = document.createElement('button');
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') openBtn.click();
+  });
+  label.appendChild(input);
+  panel.appendChild(label);
+
+  if (snapshot.settings.pinAttemptsLimit !== undefined) {
+    const remaining =
+      snapshot.settings.pinAttemptsLimit - snapshot.runtime.attemptsMade;
+    const attempts = document.createElement('p');
+    attempts.className = 'closed-info';
+    attempts.textContent = `${t('attemptsRemaining')}: ${remaining}`;
+    panel.appendChild(attempts);
+  }
+
+  if (snapshot.runtime.destructAt !== undefined) {
+    const timer = document.createElement('p');
+    timer.className = 'closed-info';
+    const update = () => {
+      const ms = snapshot.runtime.destructAt! - Date.now();
+      const sec = Math.max(0, Math.floor(ms / 1000));
+      const min = Math.floor(sec / 60);
+      const s = (sec % 60).toString().padStart(2, '0');
+      timer.textContent = `${t('autodestructIn')}: ${min}:${s}`;
+    };
+    update();
+    panel.appendChild(timer);
+  }
+
+  openBtn.className = 'close-btn';
+  openBtn.textContent = t('openSafe');
+  openBtn.addEventListener('click', async () => {
+    const pin = input.value;
+    if (!pin) return;
+    const pinHash = await hashPin(pin);
+    if (pinHash === snapshot.runtime.pinHash) {
+      dispatch({ type: 'open' });
+    } else {
+      alert(t('wrongPin'));
+      dispatch({ type: 'wrongPin' });
+    }
+  });
+  panel.appendChild(openBtn);
 
   return panel;
 }

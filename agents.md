@@ -220,7 +220,7 @@ export interface SafeSnapshot {
 
 - [x] Open state UI: text editor, image picker + preview, settings button, close button.
 - [ ] Close flow: PIN + Confirm PIN modal.
-- [ ] Closed state UI: PIN input, attempts remaining (if any), timer countdown (if any), open button.
+- [x] Closed state UI: PIN input, attempts remaining (if any), timer countdown (if any), open button.
 - [ ] Explosion feedback (animation/message) + survival result text.
 - [ ] Accessibility: labels, focus traps in modals, keyboard shortcuts.
 
@@ -301,6 +301,7 @@ export interface SafeSnapshot {
 - 2025-09-15 • validate numeric settings inputs and avoid auto-focus on language • commit c1c2152
 - 2025-09-15 • add i18n files and language switcher • commit 72d365b
 - 2025-09-15 • refine language dialog to update in place • commit ae73e39
+- 2025-09-15 • implement closed safe state UI • commit d7fee3a
 
 ## 14) License
 
