@@ -1,0 +1,21 @@
+{
+  "ok": "OK",
+  "cancel": "Anuluj",
+  "closedStateNotImplemented": "Zamknięty stan nie jest zaimplementowany",
+  "restartApp": "Restartuj aplikację",
+  "language": "Język",
+  "autodestructMinutes": "Autodestrukcja (minuty)",
+  "valueRangeError": "Wprowadź wartość z zakresu 1-999",
+  "pinAttemptsLimit": "Limit prób PIN",
+  "survivalOption": "Treść może przetrwać eksplozję",
+  "save": "Zapisz",
+  "safeOpen": "Sejf jest otwarty",
+  "safeClosed": "Sejf jest zamknięty",
+  "secretPlaceholder": "Twój największy sekret",
+  "insertText": "Włóż tekst",
+  "chooseImage": "Wybierz obrazek",
+  "closeSafe": "Zamknij sejf",
+  "setPin": "Ustaw PIN",
+  "confirmPin": "Potwierdź PIN",
+  "pinMismatch": "PIN nie pasuje"
+}

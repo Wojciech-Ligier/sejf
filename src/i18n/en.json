@@ -1,0 +1,21 @@
+{
+  "ok": "OK",
+  "cancel": "Cancel",
+  "closedStateNotImplemented": "Closed state not implemented",
+  "restartApp": "Restart application",
+  "language": "Language",
+  "autodestructMinutes": "Autodestruct (minutes)",
+  "valueRangeError": "Enter a value from 1-999",
+  "pinAttemptsLimit": "PIN attempt limit",
+  "survivalOption": "Content may survive explosion",
+  "save": "Save",
+  "safeOpen": "Safe is open",
+  "safeClosed": "Safe is closed",
+  "secretPlaceholder": "Your biggest secret",
+  "insertText": "Insert text",
+  "chooseImage": "Choose image",
+  "closeSafe": "Close safe",
+  "setPin": "Set PIN",
+  "confirmPin": "Confirm PIN",
+  "pinMismatch": "PINs do not match"
+}
