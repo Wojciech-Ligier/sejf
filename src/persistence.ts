@@ -18,6 +18,7 @@ export function loadSnapshot(): SafeSnapshot | undefined {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return undefined;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const parsed = JSON.parse(raw) as any;
     let version: number;
     let data: unknown;
