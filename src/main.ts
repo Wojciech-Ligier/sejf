@@ -1,6 +1,6 @@
 import { loadSnapshot, saveSnapshot } from './persistence';
 import { reduce, spawnSafe, type SafeEvent } from './safeMachine';
-import type { SafeSnapshot } from './types';
+import type { Lang, SafeSnapshot } from './types';
 import { hashPin } from './pin';
 
 let snapshot: SafeSnapshot = loadSnapshot() ?? spawnSafe();
@@ -91,6 +91,149 @@ async function promptPin(message: string): Promise<string | null> {
   });
 }
 
+function openSettings(): void {
+  const overlay = document.createElement('div');
+  overlay.className = 'settings-overlay';
+  const dialog = document.createElement('div');
+  dialog.className = 'settings-dialog';
+  const form = document.createElement('form');
+  form.className = 'settings-form';
+
+  const langLabel = document.createElement('label');
+  langLabel.textContent = 'Język';
+  const langSelect = document.createElement('select');
+  langSelect.value = snapshot.settings.language;
+  const langs: [Lang, string][] = [
+    ['pl', 'Polski'],
+    ['en', 'English'],
+    ['it', 'Italiano'],
+  ];
+  for (const [code, name] of langs) {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = name;
+    langSelect.appendChild(opt);
+  }
+  langLabel.appendChild(langSelect);
+
+  const autoLabel = document.createElement('label');
+  autoLabel.textContent = 'Autodestrukcja (minuty)';
+  const autoInput = document.createElement('input');
+  autoInput.type = 'number';
+  autoInput.inputMode = 'numeric';
+  autoInput.pattern = '\\d*';
+  autoInput.min = '1';
+  autoInput.max = '999';
+  autoInput.value = snapshot.settings.autodestructMinutes?.toString() ?? '';
+  const autoErr = document.createElement('div');
+  autoErr.className = 'settings-error';
+  autoInput.addEventListener('input', () => {
+    const val = Number(autoInput.value);
+    if (autoInput.value && (!Number.isInteger(val) || val < 1 || val > 999)) {
+      autoErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+    } else {
+      autoErr.textContent = '';
+    }
+  });
+  autoLabel.appendChild(autoInput);
+  autoLabel.appendChild(autoErr);
+
+  const limitLabel = document.createElement('label');
+  limitLabel.textContent = 'Limit prób PIN';
+  const limitInput = document.createElement('input');
+  limitInput.type = 'number';
+  limitInput.inputMode = 'numeric';
+  limitInput.pattern = '\\d*';
+  limitInput.min = '1';
+  limitInput.max = '999';
+  limitInput.value = snapshot.settings.pinAttemptsLimit?.toString() ?? '';
+  const limitErr = document.createElement('div');
+  limitErr.className = 'settings-error';
+  limitInput.addEventListener('input', () => {
+    const val = Number(limitInput.value);
+    if (limitInput.value && (!Number.isInteger(val) || val < 1 || val > 999)) {
+      limitErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+    } else {
+      limitErr.textContent = '';
+    }
+  });
+  limitLabel.appendChild(limitInput);
+  limitLabel.appendChild(limitErr);
+
+  const survivalLabel = document.createElement('label');
+  const survivalInput = document.createElement('input');
+  survivalInput.type = 'checkbox';
+  survivalInput.checked = snapshot.settings.survivalEnabled;
+  survivalLabel.appendChild(survivalInput);
+  survivalLabel.appendChild(
+    document.createTextNode(' Możliwy przetrwanie eksplozji'),
+  );
+
+  const actions = document.createElement('div');
+  actions.className = 'settings-actions';
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'close-btn';
+  cancelBtn.textContent = 'Anuluj';
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'submit';
+  saveBtn.className = 'close-btn';
+  saveBtn.textContent = 'Zapisz';
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+
+  form.appendChild(langLabel);
+  form.appendChild(autoLabel);
+  form.appendChild(limitLabel);
+  form.appendChild(survivalLabel);
+  form.appendChild(actions);
+
+  dialog.appendChild(form);
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+  dialog.tabIndex = -1;
+  dialog.focus();
+
+  function cleanup(): void {
+    document.body.removeChild(overlay);
+    render();
+  }
+
+  cancelBtn.addEventListener('click', cleanup);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const autoVal = Number(autoInput.value);
+    if (
+      autoInput.value &&
+      (!Number.isInteger(autoVal) || autoVal < 1 || autoVal > 999)
+    ) {
+      autoErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+      autoInput.focus();
+      return;
+    }
+    const limitVal = Number(limitInput.value);
+    if (
+      limitInput.value &&
+      (!Number.isInteger(limitVal) || limitVal < 1 || limitVal > 999)
+    ) {
+      limitErr.textContent = 'Wprowadź wartość z zakresu 1-999';
+      limitInput.focus();
+      return;
+    }
+    snapshot.settings.language = langSelect.value as Lang;
+    snapshot.settings.autodestructMinutes = autoInput.value
+      ? autoVal
+      : undefined;
+    snapshot.settings.pinAttemptsLimit = limitInput.value
+      ? limitVal
+      : undefined;
+    snapshot.settings.survivalEnabled = survivalInput.checked;
+    saveSnapshot(snapshot);
+    cleanup();
+  });
+}
+
 function render(): void {
   if (!app) return;
   app.innerHTML = '';
@@ -121,9 +264,7 @@ function renderOpen(): HTMLElement {
   const settingsBtn = document.createElement('button');
   settingsBtn.className = 'settings-icon';
   settingsBtn.textContent = '⚙️';
-  settingsBtn.addEventListener('click', () => {
-    console.log('open settings not implemented');
-  });
+  settingsBtn.addEventListener('click', openSettings);
   panel.appendChild(settingsBtn);
 
   const icon = document.createElement('img');
