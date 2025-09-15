@@ -227,8 +227,8 @@ export interface SafeSnapshot {
 ### D. Settings & i18n
 
 - [x] Settings modal (open‑only): language, timer minutes (1–999 or disabled), attempts limit (≥1 or disabled), survival checkbox.
-- [ ] i18n files: **en.json**, **pl.json**, **it.json** (100% coverage).
-- [ ] Language switcher (persists across sessions).
+- [x] i18n files: **en.json**, **pl.json**, **it.json** (100% coverage).
+- [x] Language switcher (persists across sessions).
 
 ### E. Media Handling
 
@@ -299,6 +299,8 @@ export interface SafeSnapshot {
 - 2025-09-15 • add restart button and numeric PIN dialog • commit 309e8a1
 - 2025-09-15 • add settings modal • commit b311f58
 - 2025-09-15 • validate numeric settings inputs and avoid auto-focus on language • commit c1c2152
+- 2025-09-15 • add i18n files and language switcher • commit 72d365b
+- 2025-09-15 • refine language dialog to update in place • commit ae73e39
 
 ## 14) License
 
