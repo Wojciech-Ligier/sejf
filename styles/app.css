@@ -285,6 +285,11 @@ body {
   margin: 0;
 }
 
+.countdown-warning {
+  color: #f87171;
+  font-weight: 600;
+}
+
 .explosion-message {
   margin: 0;
   text-align: center;
