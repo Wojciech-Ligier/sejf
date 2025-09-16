@@ -45,11 +45,48 @@ function scheduleTimer(): void {
           dispatch({ type: 'tick', now: Date.now() });
         }, delay);
         countdownId = window.setInterval(() => {
-          render();
+          updateCountdownElements();
         }, 1000);
+        queueMicrotask(() => {
+          updateCountdownElements();
+        });
       }
     }
   }
+}
+
+function updateCountdownElement(element: HTMLElement): void {
+  if (snapshot.runtime.state !== 'closed') return;
+  const destructAt = snapshot.runtime.destructAt;
+  if (destructAt === undefined) return;
+  const msRemaining = destructAt - Date.now();
+  const remaining = Math.max(0, msRemaining);
+  const seconds = Math.floor(remaining / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const s = (seconds % 60).toString().padStart(2, '0');
+  element.textContent = `${t('autodestructIn')}: ${minutes}:${s}`;
+
+  const closedAt = snapshot.runtime.closedAt;
+  if (closedAt === undefined) {
+    element.classList.remove('countdown-warning');
+    return;
+  }
+  const total = destructAt - closedAt;
+  if (total <= 0) {
+    element.classList.remove('countdown-warning');
+    return;
+  }
+  const ratio = remaining / total;
+  if (ratio <= 0.1) {
+    element.classList.add('countdown-warning');
+  } else {
+    element.classList.remove('countdown-warning');
+  }
+}
+
+function updateCountdownElements(): void {
+  const timers = document.querySelectorAll<HTMLElement>('[data-countdown]');
+  timers.forEach((timer) => updateCountdownElement(timer));
 }
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -428,14 +465,8 @@ function renderClosed(): HTMLElement {
   if (snapshot.runtime.destructAt !== undefined) {
     const timer = document.createElement('p');
     timer.className = 'closed-info';
-    const update = () => {
-      const ms = snapshot.runtime.destructAt! - Date.now();
-      const sec = Math.max(0, Math.floor(ms / 1000));
-      const min = Math.floor(sec / 60);
-      const s = (sec % 60).toString().padStart(2, '0');
-      timer.textContent = `${t('autodestructIn')}: ${min}:${s}`;
-    };
-    update();
+    timer.dataset.countdown = 'true';
+    updateCountdownElement(timer);
     panel.appendChild(timer);
   }
 
