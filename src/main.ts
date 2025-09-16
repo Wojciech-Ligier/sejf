@@ -316,6 +316,58 @@ function render(): void {
   }
 }
 
+function openImagePreview(src: string): void {
+  const overlay = document.createElement('div');
+  overlay.className = 'image-overlay';
+
+  const dialog = document.createElement('div');
+  dialog.className = 'image-preview-dialog';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-label', t('viewImage'));
+  dialog.tabIndex = -1;
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'image-preview-close close-btn';
+  closeBtn.setAttribute('aria-label', t('closePreview'));
+  closeBtn.textContent = '×';
+
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = t('imageAlt');
+  img.className = 'image-preview-full';
+
+  dialog.appendChild(closeBtn);
+  dialog.appendChild(img);
+  overlay.appendChild(dialog);
+
+  function cleanup(): void {
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+    document.removeEventListener('keydown', onKeyDown);
+  }
+
+  function onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      cleanup();
+    }
+  }
+
+  closeBtn.addEventListener('click', cleanup);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      cleanup();
+    }
+  });
+  document.addEventListener('keydown', onKeyDown);
+
+  document.body.appendChild(overlay);
+  closeBtn.focus();
+}
+
 function renderOpen(): HTMLElement {
   const panel = document.createElement('div');
   panel.className = 'safe-panel';
@@ -385,11 +437,24 @@ function renderOpen(): HTMLElement {
   content.appendChild(textarea);
   content.appendChild(fileInput);
 
-  if (snapshot.content.imageDataUrl) {
-    const img = document.createElement('img');
-    img.src = snapshot.content.imageDataUrl;
-    img.className = 'image-preview';
-    content.appendChild(img);
+  const imageUrl = snapshot.content.imageDataUrl;
+  if (imageUrl) {
+    const thumbButton = document.createElement('button');
+    thumbButton.type = 'button';
+    thumbButton.className = 'image-thumb';
+    thumbButton.setAttribute('aria-label', t('viewImage'));
+
+    const thumbImg = document.createElement('img');
+    thumbImg.src = imageUrl;
+    thumbImg.alt = t('imageAlt');
+    thumbImg.className = 'image-thumb-img';
+
+    thumbButton.appendChild(thumbImg);
+    thumbButton.addEventListener('click', () => {
+      openImagePreview(imageUrl);
+    });
+
+    content.appendChild(thumbButton);
   }
 
   panel.appendChild(content);
