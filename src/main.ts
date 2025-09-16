@@ -285,7 +285,10 @@ function renderOpen(): HTMLElement {
 
   const settingsBtn = document.createElement('button');
   settingsBtn.className = 'settings-icon';
+  settingsBtn.type = 'button';
   settingsBtn.textContent = '⚙️';
+  settingsBtn.setAttribute('aria-label', t('settings'));
+  settingsBtn.title = t('settings');
   settingsBtn.addEventListener('click', openSettings);
   panel.appendChild(settingsBtn);
 
@@ -296,7 +299,7 @@ function renderOpen(): HTMLElement {
   panel.appendChild(icon);
 
   const state = document.createElement('p');
-  state.className = 'safe-state';
+  state.className = 'safe-state safe-state--open';
   state.textContent = t('safeOpen');
   panel.appendChild(state);
 
@@ -384,7 +387,7 @@ function renderClosed(): HTMLElement {
   panel.appendChild(icon);
 
   const state = document.createElement('p');
-  state.className = 'safe-state';
+  state.className = 'safe-state safe-state--closed';
   state.textContent = t('safeClosed');
   panel.appendChild(state);
 
