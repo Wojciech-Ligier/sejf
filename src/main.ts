@@ -194,26 +194,34 @@ function openSettings(): void {
   autoErr.className = 'settings-error';
   autoRow.appendChild(autoErr);
   const autoEnabled = snapshot.settings.autodestructMinutes !== undefined;
+  const autoRememberedValue =
+    snapshot.settings.autodestructMinutesRemembered ??
+    snapshot.settings.autodestructMinutes ??
+    90;
+  const initialAutoValue = autoEnabled
+    ? snapshot.settings.autodestructMinutes ?? autoRememberedValue
+    : autoRememberedValue;
   autoToggle.checked = autoEnabled;
-  autoInput.value = autoEnabled
-    ? String(snapshot.settings.autodestructMinutes)
-    : '90';
+  autoInput.value = String(initialAutoValue);
   autoInput.disabled = !autoEnabled;
+
+  let autoStored = autoInput.value;
 
   autoToggle.addEventListener('change', () => {
     if (autoToggle.checked) {
       autoInput.disabled = false;
-      autoInput.value = '90';
+      autoInput.value = autoStored;
       autoErr.textContent = '';
       autoInput.focus();
     } else {
+      autoStored = autoInput.value.trim() || autoStored;
       autoInput.disabled = true;
-      autoInput.value = '90';
       autoErr.textContent = '';
     }
   });
 
   autoInput.addEventListener('input', () => {
+    autoStored = autoInput.value;
     if (!autoToggle.checked) {
       autoErr.textContent = '';
       return;
@@ -262,26 +270,34 @@ function openSettings(): void {
   limitErr.className = 'settings-error';
   limitRow.appendChild(limitErr);
   const limitEnabled = snapshot.settings.pinAttemptsLimit !== undefined;
+  const limitRememberedValue =
+    snapshot.settings.pinAttemptsLimitRemembered ??
+    snapshot.settings.pinAttemptsLimit ??
+    3;
+  const initialLimitValue = limitEnabled
+    ? snapshot.settings.pinAttemptsLimit ?? limitRememberedValue
+    : limitRememberedValue;
   limitToggle.checked = limitEnabled;
-  limitInput.value = limitEnabled
-    ? String(snapshot.settings.pinAttemptsLimit)
-    : '3';
+  limitInput.value = String(initialLimitValue);
   limitInput.disabled = !limitEnabled;
+
+  let limitStored = limitInput.value;
 
   limitToggle.addEventListener('change', () => {
     if (limitToggle.checked) {
       limitInput.disabled = false;
-      limitInput.value = '3';
+      limitInput.value = limitStored;
       limitErr.textContent = '';
       limitInput.focus();
     } else {
+      limitStored = limitInput.value.trim() || limitStored;
       limitInput.disabled = true;
-      limitInput.value = '3';
       limitErr.textContent = '';
     }
   });
 
   limitInput.addEventListener('input', () => {
+    limitStored = limitInput.value;
     if (!limitToggle.checked) {
       limitErr.textContent = '';
       return;
@@ -335,25 +351,34 @@ function openSettings(): void {
   survivalErr.className = 'settings-error';
   survivalRow.appendChild(survivalErr);
   const survivalEnabled = snapshot.settings.survivalEnabled;
-  const survivalChance = snapshot.settings.survivalChance ?? 10;
+  const survivalRememberedValue =
+    snapshot.settings.survivalChanceRemembered ??
+    snapshot.settings.survivalChance ??
+    10;
+  const initialSurvivalValue = survivalEnabled
+    ? snapshot.settings.survivalChance ?? survivalRememberedValue
+    : survivalRememberedValue;
   survivalToggle.checked = survivalEnabled;
-  survivalInput.value = survivalEnabled ? String(survivalChance) : '10';
+  survivalInput.value = String(initialSurvivalValue);
   survivalInput.disabled = !survivalEnabled;
+
+  let survivalStored = survivalInput.value;
 
   survivalToggle.addEventListener('change', () => {
     if (survivalToggle.checked) {
       survivalInput.disabled = false;
-      survivalInput.value = '10';
+      survivalInput.value = survivalStored;
       survivalErr.textContent = '';
       survivalInput.focus();
     } else {
+      survivalStored = survivalInput.value.trim() || survivalStored;
       survivalInput.disabled = true;
-      survivalInput.value = '10';
       survivalErr.textContent = '';
     }
   });
 
   survivalInput.addEventListener('input', () => {
+    survivalStored = survivalInput.value;
     if (!survivalToggle.checked) {
       survivalErr.textContent = '';
       return;
@@ -432,49 +457,55 @@ function openSettings(): void {
     e.preventDefault();
     let focusTarget: HTMLInputElement | undefined;
 
+    const autoRaw = autoInput.value.trim();
+    const autoVal = Number(autoRaw);
+    const autoValid =
+      autoRaw !== '' &&
+      Number.isInteger(autoVal) &&
+      autoVal >= 1 &&
+      autoVal <= 999;
     if (autoToggle.checked) {
-      const raw = autoInput.value.trim();
-      const val = Number(raw);
-      if (
-        raw === '' ||
-        !Number.isInteger(val) ||
-        val < 1 ||
-        val > 999
-      ) {
+      if (!autoValid) {
         autoErr.textContent = t('valueRangeError');
         focusTarget = focusTarget ?? autoInput;
+      } else {
+        autoErr.textContent = '';
       }
     } else {
       autoErr.textContent = '';
     }
 
+    const limitRaw = limitInput.value.trim();
+    const limitVal = Number(limitRaw);
+    const limitValid =
+      limitRaw !== '' &&
+      Number.isInteger(limitVal) &&
+      limitVal >= 1 &&
+      limitVal <= 999;
     if (limitToggle.checked) {
-      const raw = limitInput.value.trim();
-      const val = Number(raw);
-      if (
-        raw === '' ||
-        !Number.isInteger(val) ||
-        val < 1 ||
-        val > 999
-      ) {
+      if (!limitValid) {
         limitErr.textContent = t('valueRangeError');
         focusTarget = focusTarget ?? limitInput;
+      } else {
+        limitErr.textContent = '';
       }
     } else {
       limitErr.textContent = '';
     }
 
+    const survivalRaw = survivalInput.value.trim();
+    const survivalVal = Number(survivalRaw);
+    const survivalValid =
+      survivalRaw !== '' &&
+      Number.isInteger(survivalVal) &&
+      survivalVal >= 1 &&
+      survivalVal <= 100;
     if (survivalToggle.checked) {
-      const raw = survivalInput.value.trim();
-      const val = Number(raw);
-      if (
-        raw === '' ||
-        !Number.isInteger(val) ||
-        val < 1 ||
-        val > 100
-      ) {
+      if (!survivalValid) {
         survivalErr.textContent = t('percentageRangeError');
         focusTarget = focusTarget ?? survivalInput;
+      } else {
+        survivalErr.textContent = '';
       }
     } else {
       survivalErr.textContent = '';
@@ -487,16 +518,22 @@ function openSettings(): void {
 
     snapshot.settings.language = langSelect.value as Lang;
     setLang(snapshot.settings.language);
-    snapshot.settings.autodestructMinutes = autoToggle.checked
-      ? Number(autoInput.value.trim())
-      : undefined;
-    snapshot.settings.pinAttemptsLimit = limitToggle.checked
-      ? Number(limitInput.value.trim())
-      : undefined;
+    if (autoValid) {
+      snapshot.settings.autodestructMinutesRemembered = autoVal;
+    }
+    snapshot.settings.autodestructMinutes =
+      autoToggle.checked && autoValid ? autoVal : undefined;
+    if (limitValid) {
+      snapshot.settings.pinAttemptsLimitRemembered = limitVal;
+    }
+    snapshot.settings.pinAttemptsLimit =
+      limitToggle.checked && limitValid ? limitVal : undefined;
     snapshot.settings.survivalEnabled = survivalToggle.checked;
-    snapshot.settings.survivalChance = survivalToggle.checked
-      ? Number(survivalInput.value.trim())
-      : undefined;
+    if (survivalValid) {
+      snapshot.settings.survivalChanceRemembered = survivalVal;
+    }
+    snapshot.settings.survivalChance =
+      survivalToggle.checked && survivalValid ? survivalVal : undefined;
     saveSnapshot(snapshot);
     cleanup();
   });

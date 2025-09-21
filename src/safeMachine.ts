@@ -17,6 +17,9 @@ export function spawnSafe(language: Lang = 'en'): SafeSnapshot {
       language,
       survivalEnabled: false,
       survivalChance: 10,
+      survivalChanceRemembered: 10,
+      autodestructMinutesRemembered: 90,
+      pinAttemptsLimitRemembered: 3,
     },
     runtime: {
       state: 'open',

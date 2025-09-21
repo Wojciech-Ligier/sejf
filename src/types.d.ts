@@ -9,8 +9,11 @@ export interface SafeSettings {
   language: Lang;
   survivalEnabled: boolean; // survival chance active when true
   survivalChance?: number; // 1–100 percent chance on destruction
+  survivalChanceRemembered?: number; // last entered survival chance value
   autodestructMinutes?: number; // 1–999, undefined = disabled
+  autodestructMinutesRemembered?: number; // stored even when disabled
   pinAttemptsLimit?: number; // positive integer, undefined = unlimited
+  pinAttemptsLimitRemembered?: number; // stored even when disabled
 }
 
 export type SafeState = 'open' | 'closed' | 'destroyed';
