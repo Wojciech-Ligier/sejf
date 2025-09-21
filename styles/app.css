@@ -181,6 +181,8 @@ body {
   border-radius: 12px;
   cursor: pointer;
   max-width: 160px;
+  align-self: center;
+  margin-top: 4px;
   transition:
     border-color 0.2s,
     box-shadow 0.2s,
@@ -250,6 +252,11 @@ body {
   padding: 6px 10px;
   font-size: 20px;
   line-height: 1;
+}
+
+.image-preview-remove {
+  width: 100%;
+  text-align: center;
 }
 
 .panel-icons {

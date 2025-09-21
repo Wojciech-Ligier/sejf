@@ -16,6 +16,8 @@
   "secretPlaceholder": "Your biggest secret",
   "insertText": "Insert text",
   "chooseImage": "Choose image",
+  "replaceImage": "Replace image",
+  "removeImage": "Remove image",
   "viewImage": "Enlarge image",
   "closePreview": "Close preview",
   "imageAlt": "Image stored inside the safe",
