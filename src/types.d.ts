@@ -7,7 +7,8 @@ export interface SafeContent {
 
 export interface SafeSettings {
   language: Lang;
-  survivalEnabled: boolean; // 10% chance on destruction
+  survivalEnabled: boolean; // survival chance active when true
+  survivalChance?: number; // 1–100 percent chance on destruction
   autodestructMinutes?: number; // 1–999, undefined = disabled
   pinAttemptsLimit?: number; // positive integer, undefined = unlimited
 }
