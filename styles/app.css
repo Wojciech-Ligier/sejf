@@ -55,16 +55,28 @@ body {
 
 #app {
   height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+@media (max-width: 600px) {
+  #app {
+    padding: 24px 12px;
+  }
 }
 
 .safe-panel {
   background: var(--panel);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 0;
+  border-radius: var(--card-radius);
   padding: 12px 24px 24px;
   box-shadow: var(--shadow);
   width: 100%;
+  max-width: 520px;
   height: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
