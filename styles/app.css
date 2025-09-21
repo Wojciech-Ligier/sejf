@@ -419,6 +419,85 @@ body {
   gap: 4px;
 }
 
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.settings-row-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.settings-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-input-wrapper input {
+  flex: 1;
+}
+
+.settings-suffix {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.settings-toggle {
+  appearance: none;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.settings-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.settings-toggle:checked {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.settings-toggle:checked::after {
+  transform: translateX(18px);
+}
+
+.settings-toggle:focus-visible {
+  outline: 2px solid var(--brand-2);
+  outline-offset: 2px;
+}
+
 .settings-dialog input,
 .settings-dialog select {
   background: var(--panel-bright);
@@ -427,6 +506,15 @@ body {
   color: var(--txt);
   padding: 8px;
   font-size: 16px;
+}
+
+.settings-dialog input:disabled {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+}
+
+.settings-input-wrapper input:disabled + .settings-suffix {
+  color: rgba(154, 166, 178, 0.6);
 }
 
 .settings-error {

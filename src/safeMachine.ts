@@ -16,6 +16,7 @@ export function spawnSafe(language: Lang = 'en'): SafeSnapshot {
     settings: {
       language,
       survivalEnabled: false,
+      survivalChance: 10,
     },
     runtime: {
       state: 'open',
@@ -95,7 +96,8 @@ export function reduce(
 
     case 'explode': {
       if (snapshot.runtime.state === 'destroyed') return [snapshot, []];
-      if (snapshot.settings.survivalEnabled && random() < 0.1) {
+      const chance = snapshot.settings.survivalChance ?? 10;
+      if (snapshot.settings.survivalEnabled && random() < chance / 100) {
         return [snapshot, [{ type: 'survive' }]];
       }
       return [

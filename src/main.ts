@@ -164,60 +164,213 @@ function openSettings(): void {
   }
   langSelect.value = snapshot.settings.language;
   langLabel.appendChild(langSelect);
-
-  const autoLabel = document.createElement('label');
-  const autoText = document.createTextNode(t('autodestructMinutes'));
-  autoLabel.appendChild(autoText);
+  const autoRow = document.createElement('div');
+  autoRow.className = 'settings-row';
+  const autoHeader = document.createElement('div');
+  autoHeader.className = 'settings-row-header';
+  const autoTitle = document.createElement('span');
+  const autoTitleId = `auto-${crypto.randomUUID()}`;
+  autoTitle.id = autoTitleId;
+  autoTitle.className = 'settings-row-title';
+  const autoToggle = document.createElement('input');
+  autoToggle.type = 'checkbox';
+  autoToggle.className = 'settings-toggle';
+  autoToggle.setAttribute('aria-labelledby', autoTitleId);
+  autoHeader.appendChild(autoTitle);
+  autoHeader.appendChild(autoToggle);
+  autoRow.appendChild(autoHeader);
+  const autoInputWrapper = document.createElement('div');
+  autoInputWrapper.className = 'settings-input-wrapper';
   const autoInput = document.createElement('input');
   autoInput.type = 'number';
   autoInput.inputMode = 'numeric';
   autoInput.pattern = '\\d*';
   autoInput.min = '1';
   autoInput.max = '999';
-  autoInput.value = snapshot.settings.autodestructMinutes?.toString() ?? '';
+  autoInput.setAttribute('aria-labelledby', autoTitleId);
+  autoInputWrapper.appendChild(autoInput);
+  autoRow.appendChild(autoInputWrapper);
   const autoErr = document.createElement('div');
   autoErr.className = 'settings-error';
+  autoRow.appendChild(autoErr);
+  const autoEnabled = snapshot.settings.autodestructMinutes !== undefined;
+  autoToggle.checked = autoEnabled;
+  autoInput.value = autoEnabled
+    ? String(snapshot.settings.autodestructMinutes)
+    : '90';
+  autoInput.disabled = !autoEnabled;
+
+  autoToggle.addEventListener('change', () => {
+    if (autoToggle.checked) {
+      autoInput.disabled = false;
+      autoInput.value = '90';
+      autoErr.textContent = '';
+      autoInput.focus();
+    } else {
+      autoInput.disabled = true;
+      autoInput.value = '90';
+      autoErr.textContent = '';
+    }
+  });
+
   autoInput.addEventListener('input', () => {
-    const val = Number(autoInput.value);
-    if (autoInput.value && (!Number.isInteger(val) || val < 1 || val > 999)) {
+    if (!autoToggle.checked) {
+      autoErr.textContent = '';
+      return;
+    }
+    const raw = autoInput.value.trim();
+    const val = Number(raw);
+    if (
+      raw === '' ||
+      !Number.isInteger(val) ||
+      val < 1 ||
+      val > 999
+    ) {
       autoErr.textContent = t('valueRangeError');
     } else {
       autoErr.textContent = '';
     }
   });
-  autoLabel.appendChild(autoInput);
-  autoLabel.appendChild(autoErr);
 
-  const limitLabel = document.createElement('label');
-  const limitText = document.createTextNode(t('pinAttemptsLimit'));
-  limitLabel.appendChild(limitText);
+  const limitRow = document.createElement('div');
+  limitRow.className = 'settings-row';
+  const limitHeader = document.createElement('div');
+  limitHeader.className = 'settings-row-header';
+  const limitTitle = document.createElement('span');
+  const limitTitleId = `limit-${crypto.randomUUID()}`;
+  limitTitle.id = limitTitleId;
+  limitTitle.className = 'settings-row-title';
+  const limitToggle = document.createElement('input');
+  limitToggle.type = 'checkbox';
+  limitToggle.className = 'settings-toggle';
+  limitToggle.setAttribute('aria-labelledby', limitTitleId);
+  limitHeader.appendChild(limitTitle);
+  limitHeader.appendChild(limitToggle);
+  limitRow.appendChild(limitHeader);
+  const limitInputWrapper = document.createElement('div');
+  limitInputWrapper.className = 'settings-input-wrapper';
   const limitInput = document.createElement('input');
   limitInput.type = 'number';
   limitInput.inputMode = 'numeric';
   limitInput.pattern = '\\d*';
   limitInput.min = '1';
   limitInput.max = '999';
-  limitInput.value = snapshot.settings.pinAttemptsLimit?.toString() ?? '';
+  limitInput.setAttribute('aria-labelledby', limitTitleId);
+  limitInputWrapper.appendChild(limitInput);
+  limitRow.appendChild(limitInputWrapper);
   const limitErr = document.createElement('div');
   limitErr.className = 'settings-error';
+  limitRow.appendChild(limitErr);
+  const limitEnabled = snapshot.settings.pinAttemptsLimit !== undefined;
+  limitToggle.checked = limitEnabled;
+  limitInput.value = limitEnabled
+    ? String(snapshot.settings.pinAttemptsLimit)
+    : '3';
+  limitInput.disabled = !limitEnabled;
+
+  limitToggle.addEventListener('change', () => {
+    if (limitToggle.checked) {
+      limitInput.disabled = false;
+      limitInput.value = '3';
+      limitErr.textContent = '';
+      limitInput.focus();
+    } else {
+      limitInput.disabled = true;
+      limitInput.value = '3';
+      limitErr.textContent = '';
+    }
+  });
+
   limitInput.addEventListener('input', () => {
-    const val = Number(limitInput.value);
-    if (limitInput.value && (!Number.isInteger(val) || val < 1 || val > 999)) {
+    if (!limitToggle.checked) {
+      limitErr.textContent = '';
+      return;
+    }
+    const raw = limitInput.value.trim();
+    const val = Number(raw);
+    if (
+      raw === '' ||
+      !Number.isInteger(val) ||
+      val < 1 ||
+      val > 999
+    ) {
       limitErr.textContent = t('valueRangeError');
     } else {
       limitErr.textContent = '';
     }
   });
-  limitLabel.appendChild(limitInput);
-  limitLabel.appendChild(limitErr);
 
-  const survivalLabel = document.createElement('label');
+  const survivalRow = document.createElement('div');
+  survivalRow.className = 'settings-row';
+  const survivalHeader = document.createElement('div');
+  survivalHeader.className = 'settings-row-header';
+  const survivalTitle = document.createElement('span');
+  const survivalTitleId = `survival-${crypto.randomUUID()}`;
+  survivalTitle.id = survivalTitleId;
+  survivalTitle.className = 'settings-row-title';
+  const survivalToggle = document.createElement('input');
+  survivalToggle.type = 'checkbox';
+  survivalToggle.className = 'settings-toggle';
+  survivalToggle.setAttribute('aria-labelledby', survivalTitleId);
+  survivalHeader.appendChild(survivalTitle);
+  survivalHeader.appendChild(survivalToggle);
+  survivalRow.appendChild(survivalHeader);
+  const survivalInputWrapper = document.createElement('div');
+  survivalInputWrapper.className = 'settings-input-wrapper';
   const survivalInput = document.createElement('input');
-  survivalInput.type = 'checkbox';
-  survivalInput.checked = snapshot.settings.survivalEnabled;
-  survivalLabel.appendChild(survivalInput);
-  const survivalText = document.createTextNode(' ' + t('survivalOption'));
-  survivalLabel.appendChild(survivalText);
+  survivalInput.type = 'number';
+  survivalInput.inputMode = 'numeric';
+  survivalInput.pattern = '\\d*';
+  survivalInput.min = '1';
+  survivalInput.max = '100';
+  survivalInput.step = '1';
+  survivalInput.setAttribute('aria-labelledby', survivalTitleId);
+  survivalInputWrapper.appendChild(survivalInput);
+  const survivalSuffix = document.createElement('span');
+  survivalSuffix.className = 'settings-suffix';
+  survivalSuffix.textContent = '%';
+  survivalInputWrapper.appendChild(survivalSuffix);
+  survivalRow.appendChild(survivalInputWrapper);
+  const survivalErr = document.createElement('div');
+  survivalErr.className = 'settings-error';
+  survivalRow.appendChild(survivalErr);
+  const survivalEnabled = snapshot.settings.survivalEnabled;
+  const survivalChance = snapshot.settings.survivalChance ?? 10;
+  survivalToggle.checked = survivalEnabled;
+  survivalInput.value = survivalEnabled ? String(survivalChance) : '10';
+  survivalInput.disabled = !survivalEnabled;
+
+  survivalToggle.addEventListener('change', () => {
+    if (survivalToggle.checked) {
+      survivalInput.disabled = false;
+      survivalInput.value = '10';
+      survivalErr.textContent = '';
+      survivalInput.focus();
+    } else {
+      survivalInput.disabled = true;
+      survivalInput.value = '10';
+      survivalErr.textContent = '';
+    }
+  });
+
+  survivalInput.addEventListener('input', () => {
+    if (!survivalToggle.checked) {
+      survivalErr.textContent = '';
+      return;
+    }
+    const raw = survivalInput.value.trim();
+    const val = Number(raw);
+    if (
+      raw === '' ||
+      !Number.isInteger(val) ||
+      val < 1 ||
+      val > 100
+    ) {
+      survivalErr.textContent = t('percentageRangeError');
+    } else {
+      survivalErr.textContent = '';
+    }
+  });
 
   const actions = document.createElement('div');
   actions.className = 'settings-actions';
@@ -231,9 +384,9 @@ function openSettings(): void {
   actions.appendChild(saveBtn);
 
   form.appendChild(langLabel);
-  form.appendChild(autoLabel);
-  form.appendChild(limitLabel);
-  form.appendChild(survivalLabel);
+  form.appendChild(autoRow);
+  form.appendChild(limitRow);
+  form.appendChild(survivalRow);
   form.appendChild(actions);
 
   dialog.appendChild(form);
@@ -249,13 +402,18 @@ function openSettings(): void {
 
   function updateTexts(): void {
     langText.textContent = t('language');
-    autoText.textContent = t('autodestructMinutes');
-    limitText.textContent = t('pinAttemptsLimit');
-    survivalText.textContent = ' ' + t('survivalOption');
+    autoTitle.textContent = t('autodestructMinutes');
+    autoToggle.setAttribute('aria-label', t('autodestructMinutes'));
+    limitTitle.textContent = t('pinAttemptsLimit');
+    limitToggle.setAttribute('aria-label', t('pinAttemptsLimit'));
+    survivalTitle.textContent = t('survivalChance');
+    survivalToggle.setAttribute('aria-label', t('survivalChance'));
     cancelBtn.textContent = t('cancel');
     saveBtn.textContent = t('save');
     if (autoErr.textContent) autoErr.textContent = t('valueRangeError');
     if (limitErr.textContent) limitErr.textContent = t('valueRangeError');
+    if (survivalErr.textContent)
+      survivalErr.textContent = t('percentageRangeError');
   }
 
   updateTexts();
@@ -272,33 +430,73 @@ function openSettings(): void {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const autoVal = Number(autoInput.value);
-    if (
-      autoInput.value &&
-      (!Number.isInteger(autoVal) || autoVal < 1 || autoVal > 999)
-    ) {
-      autoErr.textContent = t('valueRangeError');
-      autoInput.focus();
+    let focusTarget: HTMLInputElement | undefined;
+
+    if (autoToggle.checked) {
+      const raw = autoInput.value.trim();
+      const val = Number(raw);
+      if (
+        raw === '' ||
+        !Number.isInteger(val) ||
+        val < 1 ||
+        val > 999
+      ) {
+        autoErr.textContent = t('valueRangeError');
+        focusTarget = focusTarget ?? autoInput;
+      }
+    } else {
+      autoErr.textContent = '';
+    }
+
+    if (limitToggle.checked) {
+      const raw = limitInput.value.trim();
+      const val = Number(raw);
+      if (
+        raw === '' ||
+        !Number.isInteger(val) ||
+        val < 1 ||
+        val > 999
+      ) {
+        limitErr.textContent = t('valueRangeError');
+        focusTarget = focusTarget ?? limitInput;
+      }
+    } else {
+      limitErr.textContent = '';
+    }
+
+    if (survivalToggle.checked) {
+      const raw = survivalInput.value.trim();
+      const val = Number(raw);
+      if (
+        raw === '' ||
+        !Number.isInteger(val) ||
+        val < 1 ||
+        val > 100
+      ) {
+        survivalErr.textContent = t('percentageRangeError');
+        focusTarget = focusTarget ?? survivalInput;
+      }
+    } else {
+      survivalErr.textContent = '';
+    }
+
+    if (focusTarget) {
+      focusTarget.focus();
       return;
     }
-    const limitVal = Number(limitInput.value);
-    if (
-      limitInput.value &&
-      (!Number.isInteger(limitVal) || limitVal < 1 || limitVal > 999)
-    ) {
-      limitErr.textContent = t('valueRangeError');
-      limitInput.focus();
-      return;
-    }
+
     snapshot.settings.language = langSelect.value as Lang;
     setLang(snapshot.settings.language);
-    snapshot.settings.autodestructMinutes = autoInput.value
-      ? autoVal
+    snapshot.settings.autodestructMinutes = autoToggle.checked
+      ? Number(autoInput.value.trim())
       : undefined;
-    snapshot.settings.pinAttemptsLimit = limitInput.value
-      ? limitVal
+    snapshot.settings.pinAttemptsLimit = limitToggle.checked
+      ? Number(limitInput.value.trim())
       : undefined;
-    snapshot.settings.survivalEnabled = survivalInput.checked;
+    snapshot.settings.survivalEnabled = survivalToggle.checked;
+    snapshot.settings.survivalChance = survivalToggle.checked
+      ? Number(survivalInput.value.trim())
+      : undefined;
     saveSnapshot(snapshot);
     cleanup();
   });
