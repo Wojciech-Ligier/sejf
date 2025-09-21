@@ -11,15 +11,22 @@
   --brand-2: #2dd4bf;
   --card-radius: 18px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  /* fallback iOS 11–12 */
+  --safe-top: constant(safe-area-inset-top);
+  --safe-right: constant(safe-area-inset-right);
+  --safe-bottom: constant(safe-area-inset-bottom);
+  --safe-left: constant(safe-area-inset-left);
+  --safe-top: env(safe-area-inset-top);
+  --safe-right: env(safe-area-inset-right);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  height: 100vh;
+html {
   background:
     radial-gradient(
       1200px 600px at 15% -10%,
@@ -37,6 +44,19 @@ body {
     160% 90%,
     140% 80%,
     auto;
+  min-height: 100dvh;
+}
+
+@supports (height: 100svh) {
+  html {
+    min-height: 100svh;
+  }
+}
+
+body {
+  margin: 0;
+  background: transparent;
+  min-height: 100%;
   color: var(--txt);
   font-family:
     'Inter',
@@ -59,11 +79,31 @@ body {
   display: flex;
   justify-content: center;
   padding: 48px 16px;
+  min-height: 100%;
+  box-sizing: border-box;
+  /* fallback iOS 11–12 */
+  padding-top: calc(constant(safe-area-inset-top) + 48px);
+  padding-right: calc(constant(safe-area-inset-right) + 16px);
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 48px);
+  padding-left: calc(constant(safe-area-inset-left) + 16px);
+  padding-top: calc(var(--safe-top) + 48px);
+  padding-right: calc(var(--safe-right) + 16px);
+  padding-bottom: calc(var(--safe-bottom) + 48px);
+  padding-left: calc(var(--safe-left) + 16px);
 }
 
 @media (max-width: 600px) {
   #app {
     padding: 24px 12px;
+    /* fallback iOS 11–12 */
+    padding-top: calc(constant(safe-area-inset-top) + 24px);
+    padding-right: calc(constant(safe-area-inset-right) + 12px);
+    padding-bottom: calc(constant(safe-area-inset-bottom) + 24px);
+    padding-left: calc(constant(safe-area-inset-left) + 12px);
+    padding-top: calc(var(--safe-top) + 24px);
+    padding-right: calc(var(--safe-right) + 12px);
+    padding-bottom: calc(var(--safe-bottom) + 24px);
+    padding-left: calc(var(--safe-left) + 12px);
   }
 }
 
