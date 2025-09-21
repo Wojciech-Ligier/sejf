@@ -459,10 +459,16 @@ body {
 }
 
 .settings-toggle {
+  --toggle-width: 44px;
+  --toggle-height: 24px;
+  --toggle-padding: 3px;
+  --toggle-knob-size: calc(var(--toggle-height) - 2 * var(--toggle-padding));
+  --toggle-shift: calc(var(--toggle-width) - 2 * var(--toggle-padding) - var(--toggle-knob-size));
   appearance: none;
-  width: 40px;
-  height: 22px;
-  border-radius: 999px;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  box-sizing: border-box;
+  border-radius: calc(var(--toggle-height) / 2);
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(255, 255, 255, 0.12);
   position: relative;
@@ -475,12 +481,13 @@ body {
 .settings-toggle::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
+  top: 50%;
+  left: var(--toggle-padding);
+  width: var(--toggle-knob-size);
+  height: var(--toggle-knob-size);
   border-radius: 50%;
   background: #fff;
+  transform: translate(0, -50%);
   transition: transform 0.2s ease;
 }
 
@@ -490,7 +497,7 @@ body {
 }
 
 .settings-toggle:checked::after {
-  transform: translateX(18px);
+  transform: translate(var(--toggle-shift), -50%);
 }
 
 .settings-toggle:focus-visible {
