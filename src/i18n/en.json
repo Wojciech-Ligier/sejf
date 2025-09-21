@@ -31,5 +31,11 @@
   "safeDestroyed": "The safe was destroyed",
   "safeDestroyedDescription": "Everything inside is gone. Start over with a new safe.",
   "startNewSafe": "Start new safe",
-  "contentSurvived": "The contents survived the explosion!"
+  "contentSurvived": "The contents survived the explosion!",
+  "about": "About",
+  "aboutTitle": "What is this project?",
+  "aboutIntro": "Safe Game is a tiny web toy where you manage a virtual safe. While it's open you can stash text or an image, then seal it with your own PIN.",
+  "aboutHow": "Experiment with timers, attempt limits, and survival chance to see how long your secrets last before the safe explodes.",
+  "aboutNote": "It's purely for fun—do not rely on it for real security.",
+  "close": "Close"
 }

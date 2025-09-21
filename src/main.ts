@@ -304,6 +304,70 @@ function openSettings(): void {
   });
 }
 
+function openAbout(): void {
+  const overlay = document.createElement('div');
+  overlay.className = 'settings-overlay';
+  const dialog = document.createElement('div');
+  dialog.className = 'info-dialog';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-label', t('about'));
+  dialog.tabIndex = -1;
+
+  const title = document.createElement('h2');
+  title.textContent = t('aboutTitle');
+  dialog.appendChild(title);
+
+  const intro = document.createElement('p');
+  intro.textContent = t('aboutIntro');
+  dialog.appendChild(intro);
+
+  const how = document.createElement('p');
+  how.textContent = t('aboutHow');
+  dialog.appendChild(how);
+
+  const note = document.createElement('p');
+  note.className = 'info-note';
+  note.textContent = t('aboutNote');
+  dialog.appendChild(note);
+
+  const actions = document.createElement('div');
+  actions.className = 'settings-actions';
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'close-btn';
+  closeBtn.textContent = t('close');
+  actions.appendChild(closeBtn);
+  dialog.appendChild(actions);
+
+  overlay.appendChild(dialog);
+
+  function cleanup(): void {
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+    document.removeEventListener('keydown', onKeyDown);
+  }
+
+  function onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      cleanup();
+    }
+  }
+
+  closeBtn.addEventListener('click', cleanup);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      cleanup();
+    }
+  });
+  document.addEventListener('keydown', onKeyDown);
+
+  document.body.appendChild(overlay);
+  dialog.focus();
+}
+
 function render(): void {
   if (!app) return;
   app.innerHTML = '';
@@ -372,14 +436,28 @@ function renderOpen(): HTMLElement {
   const panel = document.createElement('div');
   panel.className = 'safe-panel';
 
+  const icons = document.createElement('div');
+  icons.className = 'panel-icons';
+
+  const infoBtn = document.createElement('button');
+  infoBtn.type = 'button';
+  infoBtn.className = 'panel-icon-button info-icon';
+  infoBtn.textContent = 'ℹ️';
+  infoBtn.setAttribute('aria-label', t('about'));
+  infoBtn.title = t('about');
+  infoBtn.addEventListener('click', openAbout);
+  icons.appendChild(infoBtn);
+
   const settingsBtn = document.createElement('button');
-  settingsBtn.className = 'settings-icon';
   settingsBtn.type = 'button';
+  settingsBtn.className = 'panel-icon-button settings-icon';
   settingsBtn.textContent = '⚙️';
   settingsBtn.setAttribute('aria-label', t('settings'));
   settingsBtn.title = t('settings');
   settingsBtn.addEventListener('click', openSettings);
-  panel.appendChild(settingsBtn);
+  icons.appendChild(settingsBtn);
+
+  panel.appendChild(icons);
 
   const icon = document.createElement('img');
   icon.src = '/safe.webp';

@@ -31,5 +31,11 @@
   "safeDestroyed": "La cassaforte è stata distrutta",
   "safeDestroyedDescription": "Tutto il contenuto è andato perduto. Inizia con una nuova cassaforte.",
   "startNewSafe": "Avvia nuova cassaforte",
-  "contentSurvived": "Il contenuto è sopravvissuto all'esplosione!"
+  "contentSurvived": "Il contenuto è sopravvissuto all'esplosione!",
+  "about": "Informazioni",
+  "aboutTitle": "Di cosa parla questo progetto?",
+  "aboutIntro": "Safe Game è un piccolo gioco web in cui gestisci una cassaforte virtuale. Quando è aperta puoi salvare testo o un'immagine e poi chiuderla con il tuo PIN.",
+  "aboutHow": "Sperimenta con il timer di autodistruzione, il limite di tentativi e la probabilità di sopravvivenza per vedere quanto a lungo resistono i tuoi segreti prima dell'esplosione.",
+  "aboutNote": "È solo un gioco: non fare affidamento sul PIN per una vera sicurezza.",
+  "close": "Chiudi"
 }
