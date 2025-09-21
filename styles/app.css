@@ -33,9 +33,13 @@ body {
     ),
     var(--bg);
   background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position:
+    left top,
+    right top,
+    left top;
   background-size:
-    160% 90%,
-    140% 80%,
+    160% 120%,
+    140% 110%,
     auto;
   color: var(--txt);
   font-family:
