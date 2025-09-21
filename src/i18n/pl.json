@@ -31,5 +31,11 @@
   "safeDestroyed": "Sejf został zniszczony",
   "safeDestroyedDescription": "Wszystko w środku przepadło. Zacznij od nowego sejfu.",
   "startNewSafe": "Rozpocznij nowy sejf",
-  "contentSurvived": "Zawartość przetrwała eksplozję!"
+  "contentSurvived": "Zawartość przetrwała eksplozję!",
+  "about": "O projekcie",
+  "aboutTitle": "O co chodzi w tym projekcie?",
+  "aboutIntro": "Safe Game to mała gra przeglądarkowa, w której zarządzasz wirtualnym sejfem. Gdy sejf jest otwarty, możesz schować tekst lub obrazek, a potem zamknąć go własnym PIN-em.",
+  "aboutHow": "Eksperymentuj z timerem autodestrukcji, limitem prób oraz szansą przetrwania, żeby sprawdzić, jak długo utrzymasz swoje sekrety przed eksplozją.",
+  "aboutNote": "To tylko zabawa — nie traktuj PIN-u jako prawdziwego zabezpieczenia.",
+  "close": "Zamknij"
 }
