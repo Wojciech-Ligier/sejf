@@ -13,13 +13,17 @@
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
+html {
+  background-color: var(--bg);
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   background:
     radial-gradient(
       1200px 600px at 15% -10%,
@@ -53,17 +57,32 @@ body {
   line-height: 1.6;
 }
 
+@supports (height: 100dvh) {
+  body {
+    min-height: 100dvh;
+  }
+}
+
 #app {
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: stretch;
   padding: 48px 16px;
+  padding-top: calc(48px + env(safe-area-inset-top));
+  padding-bottom: calc(48px + env(safe-area-inset-bottom));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
 }
 
 @media (max-width: 600px) {
   #app {
     padding: 24px 12px;
+    padding-top: calc(24px + env(safe-area-inset-top));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    padding-left: calc(12px + env(safe-area-inset-left));
+    padding-right: calc(12px + env(safe-area-inset-right));
   }
 }
 
@@ -81,6 +100,7 @@ body {
   flex-direction: column;
   gap: 16px;
   position: relative;
+  min-height: 0;
 }
 
 .safe-panel:hover {
@@ -97,6 +117,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
 }
 
 .safe-top {
