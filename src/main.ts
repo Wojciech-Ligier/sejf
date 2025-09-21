@@ -637,8 +637,20 @@ function openImagePreview(src: string): void {
   img.alt = t('imageAlt');
   img.className = 'image-preview-full';
 
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'image-preview-remove close-btn';
+  removeBtn.textContent = t('removeImage');
+  removeBtn.addEventListener('click', () => {
+    snapshot.content.imageDataUrl = undefined;
+    saveSnapshot(snapshot);
+    cleanup();
+    render();
+  });
+
   dialog.appendChild(closeBtn);
   dialog.appendChild(img);
+  dialog.appendChild(removeBtn);
   overlay.appendChild(dialog);
 
   function cleanup(): void {
@@ -726,6 +738,9 @@ function renderOpen(): HTMLElement {
     reader.readAsDataURL(file);
   });
 
+  const imageUrl = snapshot.content.imageDataUrl;
+  const hasImage = Boolean(imageUrl);
+
   const textarea = document.createElement('textarea');
   textarea.value = snapshot.content.text;
   textarea.placeholder = t('secretPlaceholder');
@@ -742,7 +757,7 @@ function renderOpen(): HTMLElement {
   top.appendChild(textBtn);
 
   const imageBtn = document.createElement('button');
-  imageBtn.textContent = t('chooseImage');
+  imageBtn.textContent = hasImage ? t('replaceImage') : t('chooseImage');
   imageBtn.addEventListener('click', () => fileInput.click());
   top.appendChild(imageBtn);
 
@@ -750,7 +765,6 @@ function renderOpen(): HTMLElement {
   content.appendChild(textarea);
   content.appendChild(fileInput);
 
-  const imageUrl = snapshot.content.imageDataUrl;
   if (imageUrl) {
     const thumbButton = document.createElement('button');
     thumbButton.type = 'button';

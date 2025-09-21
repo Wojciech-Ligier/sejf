@@ -16,6 +16,8 @@
   "secretPlaceholder": "Il tuo segreto più grande",
   "insertText": "Inserisci testo",
   "chooseImage": "Scegli immagine",
+  "replaceImage": "Sostituisci immagine",
+  "removeImage": "Rimuovi immagine",
   "viewImage": "Ingrandisci immagine",
   "closePreview": "Chiudi anteprima",
   "imageAlt": "Immagine conservata nella cassaforte",
