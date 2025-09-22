@@ -11,6 +11,7 @@
   "percentageRangeError": "Inserisci un valore tra 1 e 100",
   "save": "Salva",
   "settings": "Impostazioni",
+  "safeTitle": "Cassaforte",
   "safeOpen": "La cassaforte è aperta",
   "safeClosed": "La cassaforte è chiusa",
   "secretPlaceholder": "Il tuo segreto più grande",

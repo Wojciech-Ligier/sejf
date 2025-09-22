@@ -91,6 +91,59 @@ function updateCountdownElements(): void {
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
+function createPanelHeader(
+  stateKey: 'safeOpen' | 'safeClosed' | 'safeDestroyed',
+  variant: 'open' | 'closed' | 'destroyed',
+  actions?: HTMLElement[],
+): HTMLElement {
+  const header = document.createElement('header');
+  header.className = 'panel-header';
+
+  const info = document.createElement('div');
+  info.className = 'panel-header-info';
+
+  const icon = document.createElement('div');
+  icon.className = `safe-icon safe-icon--${variant}`;
+
+  if (variant === 'destroyed') {
+    icon.textContent = '💥';
+    icon.setAttribute('aria-hidden', 'true');
+  } else {
+    const img = document.createElement('img');
+    img.src = '/safe.webp';
+    img.alt = '';
+    img.className = 'safe-icon-image';
+    icon.appendChild(img);
+  }
+
+  const text = document.createElement('div');
+  text.className = 'panel-header-text';
+
+  const title = document.createElement('h1');
+  title.className = 'panel-title';
+  title.textContent = t('safeTitle');
+
+  const state = document.createElement('p');
+  state.className = `safe-state safe-state--${variant}`;
+  state.textContent = t(stateKey);
+
+  text.appendChild(title);
+  text.appendChild(state);
+
+  info.appendChild(icon);
+  info.appendChild(text);
+  header.appendChild(info);
+
+  if (actions && actions.length > 0) {
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'panel-header-actions';
+    actions.forEach((action) => actionsContainer.appendChild(action));
+    header.appendChild(actionsContainer);
+  }
+
+  return header;
+}
+
   async function promptPin(message: string): Promise<string | null> {
   return new Promise((resolve) => {
     const overlay = document.createElement('div');
@@ -683,9 +736,6 @@ function renderOpen(): HTMLElement {
   const panel = document.createElement('div');
   panel.className = 'safe-panel';
 
-  const icons = document.createElement('div');
-  icons.className = 'panel-icons';
-
   const infoBtn = document.createElement('button');
   infoBtn.type = 'button';
   infoBtn.className = 'panel-icon-button info-icon';
@@ -693,7 +743,6 @@ function renderOpen(): HTMLElement {
   infoBtn.setAttribute('aria-label', t('about'));
   infoBtn.title = t('about');
   infoBtn.addEventListener('click', openAbout);
-  icons.appendChild(infoBtn);
 
   const settingsBtn = document.createElement('button');
   settingsBtn.type = 'button';
@@ -702,20 +751,10 @@ function renderOpen(): HTMLElement {
   settingsBtn.setAttribute('aria-label', t('settings'));
   settingsBtn.title = t('settings');
   settingsBtn.addEventListener('click', openSettings);
-  icons.appendChild(settingsBtn);
 
-  panel.appendChild(icons);
-
-  const icon = document.createElement('img');
-  icon.src = '/safe.webp';
-  icon.alt = '';
-  icon.className = 'safe-icon';
-  panel.appendChild(icon);
-
-  const state = document.createElement('p');
-  state.className = 'safe-state safe-state--open';
-  state.textContent = t('safeOpen');
-  panel.appendChild(state);
+  panel.appendChild(
+    createPanelHeader('safeOpen', 'open', [infoBtn, settingsBtn]),
+  );
 
   const content = document.createElement('div');
   content.className = 'safe-content';
@@ -804,16 +843,7 @@ function renderClosed(): HTMLElement {
   const panel = document.createElement('div');
   panel.className = 'safe-panel';
 
-  const icon = document.createElement('img');
-  icon.src = '/safe.webp';
-  icon.alt = '';
-  icon.className = 'safe-icon';
-  panel.appendChild(icon);
-
-  const state = document.createElement('p');
-  state.className = 'safe-state safe-state--closed';
-  state.textContent = t('safeClosed');
-  panel.appendChild(state);
+  panel.appendChild(createPanelHeader('safeClosed', 'closed'));
 
   if (snapshot.runtime.explosionResult === 'survived') {
     const survived = document.createElement('p');
@@ -887,15 +917,7 @@ function renderDestroyed(): HTMLElement {
   const panel = document.createElement('div');
   panel.className = 'safe-panel destroyed-panel';
 
-  const emoji = document.createElement('div');
-  emoji.className = 'destroyed-emoji';
-  emoji.textContent = '💥';
-  panel.appendChild(emoji);
-
-  const title = document.createElement('h2');
-  title.className = 'destroyed-title';
-  title.textContent = t('safeDestroyed');
-  panel.appendChild(title);
+  panel.appendChild(createPanelHeader('safeDestroyed', 'destroyed'));
 
   const description = document.createElement('p');
   description.className = 'destroyed-text';
