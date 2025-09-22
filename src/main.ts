@@ -719,8 +719,6 @@ function renderOpen(): HTMLElement {
 
   const content = document.createElement('div');
   content.className = 'safe-content';
-  const top = document.createElement('div');
-  top.className = 'safe-top';
 
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -749,19 +747,6 @@ function renderOpen(): HTMLElement {
     saveSnapshot(snapshot);
   });
 
-  const textBtn = document.createElement('button');
-  textBtn.textContent = t('insertText');
-  textBtn.addEventListener('click', () => {
-    textarea.focus();
-  });
-  top.appendChild(textBtn);
-
-  const imageBtn = document.createElement('button');
-  imageBtn.textContent = hasImage ? t('replaceImage') : t('chooseImage');
-  imageBtn.addEventListener('click', () => fileInput.click());
-  top.appendChild(imageBtn);
-
-  content.appendChild(top);
   content.appendChild(textarea);
   content.appendChild(fileInput);
 
@@ -786,6 +771,15 @@ function renderOpen(): HTMLElement {
 
   panel.appendChild(content);
 
+  const actions = document.createElement('div');
+  actions.className = 'safe-actions';
+
+  const imageBtn = document.createElement('button');
+  imageBtn.className = 'close-btn image-action-btn';
+  imageBtn.textContent = hasImage ? t('replaceImage') : t('chooseImage');
+  imageBtn.addEventListener('click', () => fileInput.click());
+  actions.appendChild(imageBtn);
+
   const closeBtn = document.createElement('button');
   closeBtn.className = 'close-btn';
   closeBtn.textContent = t('closeSafe');
@@ -800,7 +794,8 @@ function renderOpen(): HTMLElement {
     const pinHash = await hashPin(pin);
     dispatch({ type: 'close', pinHash, now: Date.now() });
   });
-  panel.appendChild(closeBtn);
+  actions.appendChild(closeBtn);
+  panel.appendChild(actions);
 
   return panel;
 }
